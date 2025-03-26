@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+// AuthController.java (Google OAuth)
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -19,9 +20,8 @@ public class AuthController {
         Map<String, Object> response = new HashMap<>();
         response.put("name", user.getFullName());
         response.put("email", user.getEmail());
-        response.put("roles", List.of("ROLE_USER"));  // Assign roles dynamically
-        response.put("token", user.getIdToken().getTokenValue()); // ✅ Use Google ID Token
-
+        response.put("roles", user.getAuthorities());
+        response.put("token", user.getIdToken().getTokenValue());
         return response;
     }
 }

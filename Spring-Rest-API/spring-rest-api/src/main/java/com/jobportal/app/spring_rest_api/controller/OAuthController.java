@@ -19,7 +19,6 @@ public class OAuthController {
         this.restTemplate = new RestTemplate();
     }
 
-    // Fetch token from MVC (8080) and save in DB
     @PostMapping("/fetch-token")
     public ResponseEntity<?> fetchTokenFromMVC(@RequestParam String email) {
         String mvcUrl = "http://localhost:8080/auth/token";

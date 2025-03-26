@@ -24,12 +24,8 @@ public class User {
     @Column(unique = true)
     private String email;
     private String oauthToken; 
-    private String password;
+    private String password;    
 
     @Enumerated(EnumType.STRING)
     private Role role;
-
-    public void setPassword(String password) {
-        this.password = new BCryptPasswordEncoder().encode(password);
-    }
 }

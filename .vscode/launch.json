@@ -1,0 +1,31 @@
+{
+    "configurations": [
+        {
+            "name": "Attach to Chrome",
+            "port": 9222,
+            "request": "attach",
+            "type": "chrome",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-HiroscopeMvcApplication<hiroscope-mvc>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.hireoscope.app.hiroscope_mvc.HiroscopeMvcApplication",
+            "projectName": "hiroscope-mvc",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-SpringRestApiApplication<spring-rest-api>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.jobportal.app.spring_rest_api.SpringRestApiApplication",
+            "projectName": "spring-rest-api",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

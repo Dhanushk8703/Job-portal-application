@@ -10,8 +10,8 @@ public class EmployerController {
         return "EmployeerForm";
     }
     
-    @GetMapping("/userrole")
-    public String userrole() {
-        return "Userrole";
+    @GetMapping("/userRole")
+    public String userRole() {
+        return "UserRole";
     }
 }
