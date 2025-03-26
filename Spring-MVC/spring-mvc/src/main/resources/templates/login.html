@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to bottom, #b3e0ff, white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 400px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .icon-container {
+            background: #f1f1f1;
+            padding: 15px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .form-control {
+            padding: 12px;
+            border-radius: 10px;
+        }
+        .btn-login {
+            background: black;
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            width: 100%;
+            font-weight: bold;
+        }
+        .btn-login:hover {
+            background: #333;
+        }
+        .social-buttons button {
+            background: #f1f1f1;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            margin: 0 5px;
+        }
+        .social-buttons img {
+            width: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+
+        <h2 class="mb-2">Sign in with email</h2>
+        <p class="text-muted">Make a new doc to bring your words, data, and teams together. For free</p>
+        <input type="email" class="form-control mb-3" placeholder="Email" th:placeholder="'Email'">
+        <input type="password" class="form-control mb-2" placeholder="Password" th:placeholder="'Password'">
+        <div class="text-end text-primary small mb-3">Forgot password?</div>
+        <button class="btn btn-login">Get Started</button>
+        <p class="text-muted my-3">Or sign in with</p>
+        <div class="social-buttons d-flex justify-content-center">
+            <button><img th:src="@{/images/google.svg}" /></button>
+         
+        </div>
+    </div>
+</body>
+</html>
