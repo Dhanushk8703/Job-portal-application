@@ -21,16 +21,6 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             text-align: center;
             width: 400px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        .icon-container {
-            background: #f1f1f1;
-            padding: 15px;
-            border-radius: 50%;
-            display: inline-block;
         }
         .form-control {
             padding: 12px;
@@ -47,32 +37,47 @@
         .btn-login:hover {
             background: #333;
         }
-        .social-buttons button {
-            background: #f1f1f1;
-            border: none;
-            padding: 10px;
-            border-radius: 50%;
-            margin: 0 5px;
-        }
-        .social-buttons img {
-            width: 24px;
+        .error-message {
+            color: red;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
     <div class="login-container">
-
         <h2 class="mb-2">Sign in with email</h2>
-        <p class="text-muted">Make a new doc to bring your words, data, and teams together. For free</p>
-        <input type="email" class="form-control mb-3" placeholder="Email" th:placeholder="'Email'">
-        <input type="password" class="form-control mb-2" placeholder="Password" th:placeholder="'Password'">
-        <div class="text-end text-primary small mb-3">Forgot password?</div>
-        <button class="btn btn-login">Get Started</button>
+        <p class="text-muted">Enter your credentials to access your dashboard.</p>
+        <form th:action="@{/perform_login}" method="post">
+            <input type="email" name="email" id="email" class="form-control mb-3" placeholder="Email" required>
+            <input type="password" name="password" id="password" class="form-control mb-2" placeholder="Password" required>
+            <div id="error-message" class="error-message" th:text="${message}"></div>
+            <button type="submit" class="btn btn-login">Login</button>
+        </form>
+        <!-- Separate Google Login Button -->
         <p class="text-muted my-3">Or sign in with</p>
         <div class="social-buttons d-flex justify-content-center">
-            <button><img th:src="@{/images/google.svg}" /></button>
-         
+            <a href="http://localhost:8080/oauth2/authorization/google">
+                <button type="button"><img src="/images/google.svg" /></button>
+            </a>
         </div>
+        
+        <p class="text-muted mt-3">Don't have an account? <a th:href="@{/signup}">Sign Up</a></p>        
     </div>
+
+    <script>
+        function validateForm() {
+            let email = document.getElementById("email").value;
+            let password = document.getElementById("password").value;
+            let errorMessage = document.getElementById("error-message");
+
+            if (email.trim() === "" || password.trim() === "") {
+                errorMessage.textContent = "Both fields are required!";
+                return false;
+            }
+            return true;
+        }
+
+        
+    </script>
 </body>
 </html>

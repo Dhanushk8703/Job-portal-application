@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class MainController {
     
-    @GetMapping("/")
+    @GetMapping("/signup")
     public String homePage() {
         return "index";
     }
@@ -20,6 +20,6 @@ public class MainController {
                          Model model) {
         // You can process the signup data here
         model.addAttribute("message", "Signup successful for: " + email);
-        return "success"; // Redirects to a success page (success.html or success.jsp)
+        return "success";
     }
 }

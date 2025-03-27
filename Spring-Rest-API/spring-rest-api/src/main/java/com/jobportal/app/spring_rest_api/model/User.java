@@ -1,7 +1,5 @@
 package com.jobportal.app.spring_rest_api.model;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -21,9 +19,11 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
-    @Column(unique = true)
+    @Column(unique = true,nullable = false)
     private String email;
     private String oauthToken; 
+
+    @Column(nullable = false)
     private String password;    
 
     @Enumerated(EnumType.STRING)

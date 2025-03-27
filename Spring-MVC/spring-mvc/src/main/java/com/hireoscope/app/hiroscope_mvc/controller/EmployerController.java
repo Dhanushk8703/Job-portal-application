@@ -2,12 +2,11 @@ package com.hireoscope.app.hiroscope_mvc.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
 public class EmployerController {
-  @GetMapping("/employer")
+  @GetMapping("/employer/form")
     public String employer() {
         return "EmployeerForm";
     }
@@ -17,7 +16,7 @@ public class EmployerController {
         return "UserRole";
     }
 
-    @GetMapping("/login-page")
+    @GetMapping("EMPLOYER/login")
     public String login() {
         return "login";
     }

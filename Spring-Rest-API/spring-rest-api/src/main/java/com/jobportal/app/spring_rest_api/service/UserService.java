@@ -1,7 +1,10 @@
 package com.jobportal.app.spring_rest_api.service;
 
+import com.jobportal.app.spring_rest_api.model.Role;
 import com.jobportal.app.spring_rest_api.model.User;
 import com.jobportal.app.spring_rest_api.repository.UserRepository;
+
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
@@ -35,6 +38,12 @@ public class UserService {
             return userRepository.save(user);
         }
         return null;
+    }
+
+    public Role getUserRole(String email) {
+        return userRepository.findByEmail(email)
+                .map(User::getRole) // Get the role from the User entity
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
     }
 }
 

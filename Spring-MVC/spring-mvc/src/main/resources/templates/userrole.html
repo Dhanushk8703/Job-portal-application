@@ -143,15 +143,16 @@
         function selectOption(element, role) {
             document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
             element.classList.add('selected');
-            selectedRole = role; // Store selected role
+            selectedRole = role;
 
             let createButton = document.getElementById('createAccount');
             createButton.disabled = false;
             createButton.classList.add('active');
         }
+
         document.getElementById('createAccount').addEventListener('click', function () {
             if (selectedRole) {
-                window.location.href = `/manual/signup?role=${selectedRole}`; // Redirect to signup page with role as parameter
+                window.location.href = `/manual/signup?role=${selectedRole}`;  // Ensure this path matches backend
             }
         });
     </script>

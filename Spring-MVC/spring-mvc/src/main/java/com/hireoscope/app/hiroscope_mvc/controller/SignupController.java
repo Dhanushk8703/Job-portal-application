@@ -14,13 +14,17 @@ import com.hireoscope.app.hiroscope_mvc.model.UserDTO;
 public class SignupController {
 
     private final RestTemplate restTemplate = new RestTemplate();
-    private static final String REST_API_URL = "http://localhost:8081/auth/register"; // Update with actual API URL
+    private static final String REST_API_URL = "http://localhost:8081/auth/register";
 
     @GetMapping("/signup")
     public String showSignupForm(@RequestParam(required = false) Role role, Model model) {
         UserDTO user = new UserDTO();
-        user.setRole(role);
-        model.addAttribute("user", user);
+        if (role != null) {
+            user.setRole(role);
+        } else {
+            user.setRole(Role.JOB_SEEKER);  // Default role if none is provided
+        }
+        model.addAttribute("user", user); // Ensure user is always added
         return "signup"; 
     }
 
@@ -35,7 +39,7 @@ public class SignupController {
 
             if (response.getStatusCode().is2xxSuccessful()) {
                 model.addAttribute("message", "Account created successfully!");
-                return "redirect:/dashboard";
+                return "redirect:/login";
             } else {
                 model.addAttribute("message", "Signup failed. Try again!");
                 return "signup";
