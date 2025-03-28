@@ -53,52 +53,92 @@
             <button class="btn-custom btn-dark" id="nextBtn">Next<i class="fas fa-arrow-right"></i></button>
         </div>
     </div>
-
     <div class="container-box hidden" id="step3">
         <p class="text-muted">3/5 Job Post</p>
-        <h2>Next, estimate the scope of your work.</h2>
-        <p>Consider the size of your project and the time it will take.</p>
-        
+        <h2>Specify the job type and work mode.</h2>
+        <p>Defining the nature of the job will help attract the right candidates. Please select the appropriate job status, work mode, and required experience level.</p>
+    
+        <!-- 🔹 Job Status -->
         <div>
-            <h5>Project Scope 
-                <button class="edit-btn" onclick="toggleSection('scopeSection')">
+            <h5>Job Status 
+                <button class="edit-btn" onclick="reopenSection('jobStatusSection')"><i class="fas fa-pen"></i></button>
+            </h5>
+            <p>Choose the employment type that best describes this position.</p>
+            <div id="jobStatusSection" class="option-group">
+                <div class="option"><input type="radio" name="jobStatus" value="full-time"> <strong>Full-time</strong></div>
+                <div class="option"><input type="radio" name="jobStatus" value="part-time"> <strong>Part-time</strong></div>
+                <div class="option"><input type="radio" name="jobStatus" value="intern"> <strong>Intern</strong></div>
+            </div>
+        </div>
+    
+        <!-- 🔹 Work Mode -->
+        <div>
+            <h5>Work Mode 
+                <button class="edit-btn" onclick="reopenSection('workModeSection')"><i class="fas fa-pen"></i></button>
+            </h5>
+            <p>Specify where the job will be performed.</p>
+            <div id="workModeSection" class="option-group">
+                <div class="option"><input type="radio" name="workMode" value="offline"> <strong>Offline</strong></div>
+                <div class="option"><input type="radio" name="workMode" value="online"> <strong>Online</strong></div>
+            </div>
+        </div>
+    
+        <!-- 🔹 Required Experience Level -->
+        <div>
+            <h5>Required Experience Level 
+                <button class="edit-btn" onclick="reopenSection('experienceSection')"><i class="fas fa-pen"></i></button>
+            </h5>
+            <p>Select the level of experience needed for this role.</p>
+            <div id="experienceSection" class="option-group">
+                <div class="option"><input type="radio" name="experience" value="entry"> <strong>Entry Level</strong></div>
+                <div class="option"><input type="radio" name="experience" value="intermediate"> <strong>Intermediate</strong></div>
+                <div class="option"><input type="radio" name="experience" value="expert"> <strong>Expert</strong></div>
+            </div>
+        </div>
+    
+        <!-- 🔹 Job Location -->
+        <div>
+            <h5>Job Location 
+                <button class="edit-btn" onclick="reopenSection('jobLocationSection')"><i class="fas fa-pen"></i></button>
+            </h5>
+            <div id="jobLocationSection">
+                <div id="jobLocationContainer">
+                    <div class="location-input">
+                        <input type="text" class="custom-input location-input-field" placeholder="Enter job location (e.g., Remote, New York, USA)">
+                        <button class="remove-btn" onclick="removeLocationField(this)"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+                <div class="location-buttons">
+                    <button class="btn btn-outline-primary" id="addLocationBtn" onclick="addLocationField()">+ Add Location</button>
+                    <button class="btn btn-success" id="saveLocationBtn" onclick="hideLocationSection()">Save</button>
+                </div>
+            </div>
+        </div>
+    
+        <!-- 🔹 Educational Qualifications -->
+        <div>
+            <h5>Educational Qualifications 
+                <button class="edit-btn" onclick="reopenSection('educationSection')">
                     <i class="fas fa-pen"></i>
                 </button>
             </h5>
-            <div id="scopeSection" class="option-group">
-                <div class="option"><input type="radio" name="scope" value="large"> <strong>Large</strong> - Longer-term or complex initiatives (e.g., full website).</div>
-                <div class="option"><input type="radio" name="scope" value="medium"> <strong>Medium</strong> - Well-defined projects (e.g., landing page).</div>
-                <div class="option"><input type="radio" name="scope" value="small"> <strong>Small</strong> - Quick and straightforward tasks.</div>
-            </div>
-        </div>
-
-        <div>
-            <h5>How long will your work take? 
-                <button class="edit-btn" onclick="toggleSection('durationSection')"><i class="fas fa-pen"></i></button>
-            </h5>
-            <div id="durationSection" class="option-group">
-                <div class="option"><input type="radio" name="duration" value="3-6 months"> 3 to 6 months</div>
-                <div class="option"><input type="radio" name="duration" value="1-3 months"> 1 to 3 months</div>
-                <div class="option"><input type="radio" name="duration" value="less than 1 month"> Less than 1 month</div>
-            </div>
-        </div>
-        <div>
-            <h5>What level of experience will it need? <button class="edit-btn" onclick="toggleSection('experienceSection')"><i class="fas fa-pen"></i></button></h5>
-            <div id="experienceSection" class="option-group">
-                <div class="option"><input type="radio" name="experience" value="entry"> <strong>Entry</strong> - Someone relatively new to this field.</div>
-                <div class="option"><input type="radio" name="experience" value="intermediate"> <strong>Intermediate</strong> - Substantial experience in this field.</div>
-                <div class="option"><input type="radio" name="experience" value="expert"> <strong>Expert</strong> - Deep expertise in this field.</div>
-            </div>
-        </div>
-        
-        <div>
-            <h5>Is this job a contract-to-hire opportunity? <button class="edit-btn" onclick="toggleSection('contractSection')"><i class="fas fa-pen"></i></button></h5>
-            <div id="contractSection" class="option-group">
-                <div class="option"><input type="radio" name="contract" value="yes"> <strong>Yes</strong>, this could become full-time.</div>
-                <div class="option"><input type="radio" name="contract" value="no"> No, not at this time.</div>
+            <div id="educationSection" style="display: none;">
+                <div id="educationContainer">
+                    <div class="edu-input">
+                        <input type="text" class="custom-input edu-input-field" placeholder="Enter qualification (e.g., B.Tech in Computer Science)">
+                        <button class="remove-btn" onclick="removeEducationField(this)"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+                <div class="edu-buttons">
+                    <button class="btn btn-outline-primary" id="addEducationBtn" onclick="addEducationField()">+ Add Qualification</button>
+                    <button class="btn btn-success" id="saveEducationBtn" onclick="hideEducationSection()">Save</button>
+                </div>
             </div>
         </div>
     </div>
+    
+            
+    
     <div class="container-box hidden" id="step4">
         <p class="text-muted">4/5 Job Post</p>
         <h2 class="fw-bold">Tell us about your budget.</h2>
@@ -154,6 +194,10 @@
         <textarea id="jobDescription" class="form-control" placeholder="Type your job description here..." rows="5" th:text="${jobDescription}"></textarea>
         <div class="word-count"><span id="wordCount">0</span> / 50 words required</div>
         <div class="error-message" id="errorMessage"><i class="fas fa-exclamation-circle"></i> Description must have at least 50 words.</div>
+        <div>
+            <h5>Application Deadline</h5>
+            <input type="date" class="custom-input" id="applicationDeadline">
+        </div>
     </div>
     
     <script th:src="@{/js/script.js}"></script>

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
+
 @Controller
 public class EmployerController {
   @GetMapping("/employer")
@@ -21,5 +22,15 @@ public class EmployerController {
     public String login() {
         return "login";
     }
+
+    @GetMapping("/register")
+   public String register() {
+       return "companyform";
+   }
+    @GetMapping("/profile")
+    public String profile() {
+        return "employerprofile";
+    }
+    
     
 }
