@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Job Portal - Registration</title>
+    <link rel="preload" href="/css/styles.css" as="style" onload="this.rel='stylesheet'">
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Register</h2>
+
+<form action="/auth/register" method="post">
+
+    <label for="email">Email (Username):</label>
+    <input type="email" id="email" name="email" required><br>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required><br>
+
+    
+    <div id="role-container"></div>
+        <label for="role">Role:</label>
+        <input type="text" id="role" name="role" required readonly><br>
+    </div>
+    <button type="submit">Register</button>
+</form>
+    <script>
+    // Retrieve the role from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedRole = urlParams.get('role');
+
+    if (selectedRole) {
+        const roleInput = document.getElementById('role');
+        roleInput.value = selectedRole;
+    }
+    
+    document.querySelector('form').addEventListener('submit', function (event) {
+        const roleInput = document.getElementById('role').value;
+
+        if (roleInput === 'EMPLOYER') {
+            event.preventDefault();
+            window.location.href = '/employer_register';
+        } else if (roleInput === 'JOB_SEEKER') {
+            event.preventDefault();
+            window.location.href = '/jobseeker';
+        }
+    });
+        </script>
+</body>
+</html>

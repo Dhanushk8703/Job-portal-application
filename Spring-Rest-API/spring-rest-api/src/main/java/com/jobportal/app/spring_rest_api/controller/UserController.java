@@ -1,40 +1,44 @@
 package com.jobportal.app.spring_rest_api.controller;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.jobportal.app.spring_rest_api.model.User;
+import com.jobportal.app.spring_rest_api.service.UserService;
 
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
 public class UserController {
-    
-    @GetMapping("/profile")
-    public Map<String, Object> getUserProfile(@AuthenticationPrincipal OAuth2User user) {
-        if (user != null) {
-            return Map.of(
-                "name", user.getAttribute("name"),
-                "email", user.getAttribute("email"),
-                "picture", user.getAttribute("picture")
-            );
-        }
-        return Map.of("error", "User not authenticated");
+
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
-    @GetMapping("/user")
-    public Map<String, Object> getUserInfo(@AuthenticationPrincipal Jwt jwt) {
-        return Map.of(
-                "username", jwt.getClaim("email"),
-                "roles", jwt.getClaim("roles")
-        );
+    @PostMapping("/auth/register")
+    public Map<String, String> registerUser(@RequestBody User user) {
+        userService.addUser(user);
+        return Map.of("message", "User registered successfully");
     }
+
+    @PostMapping("/auth/login")
+public Map<String, String> loginUser(@RequestBody User user) {
+    boolean isValidUser = userService.validateUser(user.getEmail(), user.getPassword(), user.getRole());
+    if (isValidUser) {
+        return Map.of("message", "Login successful");
+    } else {
+        return Map.of("message", "Invalid email or password");
+    }
+}
 
     @GetMapping("/admin")
     public String adminAccess() {
-        return "Hello Admin! You have access.";
+        return "Hello Admin! You have updated access.";
     }
 }

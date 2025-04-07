@@ -370,3 +370,66 @@ body {
 .hidden {
     display: none;
 }
+/* Parent container to align everything */
+#jobLocationSection, #educationSection {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Aligns everything to the left */
+}
+
+/* Wrap input field and delete button in a row */
+.location-input, .edu-input {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between input & delete button */
+    margin-bottom: 10px;
+}
+
+/* Input field full width */
+.location-input-field, .edu-input-field {
+    flex-grow: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Delete button (trash icon) */
+.remove-btn {
+    background: red;
+    border: none;
+    color: white;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+/* ✅ Move "Add" & "Save" buttons below input field */
+.location-buttons, .edu-buttons {
+    display: flex;
+    flex-direction: row; /* Buttons in a row */
+    gap: 10px; /* Space between buttons */
+    margin-top: 10px;
+}
+
+/* Make buttons equal width */
+.location-buttons button, .edu-buttons button {
+    min-width: 150px; /* Ensures button size consistency */
+}
+
+/* Make buttons full width on small screens */
+@media (max-width: 768px) {
+    .location-buttons, .edu-buttons {
+        flex-direction: column; /* Stack buttons on mobile */
+        width: 100%;
+    }
+
+    .location-buttons button, .edu-buttons button {
+        width: 100%;
+    }
+}

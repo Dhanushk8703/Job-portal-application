@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join as a Client or Freelancer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: #f9f9f9;
+            margin: 0;
+        }
+        .header {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #14a800;
+        }
+        .container {
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 300px;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            text-align: center;
+        }
+        .option:hover, .option.selected {
+            border-color: #14a800;
+            box-shadow: 0 4px 20px rgba(0, 128, 0, 0.2);
+        }
+        .option i {
+            font-size: 40px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .option strong {
+            font-size: 18px;
+            line-height: 1.4;
+            padding: 10px;
+            color: #333;
+        }
+        .option input {
+            display: none;
+        }
+        .create-btn {
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            background: #ccc;
+            color: white;
+            cursor: not-allowed;
+            transition: background 0.3s;
+            width: 100%;
+            max-width: 300px;
+        }
+        .create-btn.active {
+            background: #14a800;
+            cursor: pointer;
+        }
+        .login {
+            margin-top: 15px;
+        }
+        .login a {
+            color: #14a800;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        @media (min-width: 600px) {
+            .options {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">Hireoscope</div>
+    <div class="container">
+        <h1>Join as a client or freelancer</h1>
+        <div class="options">
+            <label class="option" onclick="selectOption(this, 'EMPLOYER')">
+                <i class="fas fa-briefcase"></i>
+                <strong>I’m a client, hiring for a project</strong>
+                <input type="radio" name="role" value="EMPLOYER">
+            </label>
+            <label class="option" onclick="selectOption(this, 'JOB_SEEKER')">
+                <i class="fas fa-laptop"></i>
+                <strong>I’m a freelancer, looking for work</strong>
+                <input type="radio" name="role" value="JOB_SEEKER">
+            </label>
+        </div>
+        <button class="create-btn" id="createAccount" disabled>Create Account</button>
+        <p class="login">Already have an account? <a th:href="@{/index}">Log In</a></p>
+    </div>
+    <script>
+        let selectedRole = '';
+
+        function selectOption(element, role) {
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedRole = role;
+            const createAccountButton = document.getElementById('createAccount');
+            createAccountButton.disabled = false;
+            createAccountButton.classList.add('active');
+        }
+
+        document.getElementById('createAccount').addEventListener('click', function() {
+            if (selectedRole) {
+            window.location.href = '/register?role=' + selectedRole;
+            }
+        });
+    </script>
+</body>
+</html>

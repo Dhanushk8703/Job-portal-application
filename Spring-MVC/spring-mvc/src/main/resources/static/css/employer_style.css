@@ -1,0 +1,195 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f5f6fa;
+    color: #333;
+    margin: 0;
+}
+.sidebar {
+    width: 90px;
+    min-height: calc(100vh - 80px);
+    padding-top: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    left: 20px;
+    top: 80px;
+    bottom: 20px;
+}
+
+.nav-links {
+    width: 100%;
+    padding: 0;
+
+    list-style: none;
+}
+.nav-item {
+    width: 100%;
+    margin-bottom: 15px;
+    position: relative;
+}
+.nav-link {
+    color: #10002b;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    text-decoration: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    background: rgba(160, 160, 255, 0.1);
+    margin: auto;
+    position: relative;
+    transition: all 0.3s ease;
+}
+.nav-link.active {
+    background: white;
+    color: #1a104f;
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    position: relative;
+    font-weight: bold;
+}
+.nav-link.active::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: #1a104f;
+    border-radius: 50%;
+    z-index: 1;
+}
+.nav-link.active i, 
+.nav-link.active span {
+    position: relative;
+    z-index: 2;
+    color: white !important;
+    font-size: 11px;
+    
+}
+.nav-link.active::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: -40px;
+    transform: translateY(-50%);
+    width: 84px;
+    height: 84px;
+    background: white;
+    z-index: -1;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 30px;
+    margin-left: 120px;
+    margin-top: 100px;
+    background: white;
+    border-radius: 20px;
+    color: #333;
+    position: relative;
+   
+}
+.topbar {
+    background: #1a104f;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    height: 60px;
+    z-index: 1000;
+}
+
+.btn-text {
+    display: none;
+}
+@media (max-width: 768px) {
+    .topbar div {
+        display: flex;  /* Ensures buttons stay in a row */
+        gap: 8px; /* Adds spacing between buttons */
+    }
+    
+    .topbar button {
+        width: 40px;  
+        height: 40px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0; /* Prevents buttons from shrinking */
+    }
+    
+    .topbar button span {
+        display: none !important;
+    }
+}
+
+@media (max-width: 991px) {
+    .sidebar {
+        display: none;
+    }
+    .floating-menu {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #1a104f;
+        color: white;
+        border-radius: 50%;
+        padding: 20px;
+        cursor: pointer;
+        box-shadow: 7px 7px 15px rgba(55, 84, 170, 0.15), -7px -7px 20px rgba(255, 255, 255, 1);
+    }
+    .floating-menu i {
+        font-size: 20px;
+    }
+    .floating-menu .menu-item {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s ease;
+        background: white;
+        color: #1a104f;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .floating-menu.open .menu-item {
+        opacity: 1;
+        pointer-events: auto;
+    }
+.floating-menu.open .menu-item:nth-of-type(1) { bottom: 80px; right: 20px; }
+.floating-menu.open .menu-item:nth-of-type(2) { bottom: 140px; right: 20px; }
+.floating-menu.open .menu-item:nth-of-type(3) { bottom: 200px; right: 20px; }
+.floating-menu.open .menu-item:nth-of-type(4) { bottom: 260px; right: 20px; }
+.floating-menu.open .menu-item:nth-of-type(5) { bottom: 320px; right: 20px; }
+.content {
+margin-left: 20px; /* Remove the left margin for small screens */
+padding: 20px;
+}
+}
+.floating-menu > i { /* Only targets the main "+" icon */
+transition: transform 0.3s ease-in-out;
+}
+
+.floating-menu.open > i {
+transform: rotate(90deg); /* Rotates + to × */
+}

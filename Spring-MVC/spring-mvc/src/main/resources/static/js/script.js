@@ -10,18 +10,18 @@ const progressBar = document.getElementById('progressBar');
 const nextBtn = document.getElementById('nextBtn');
 const backBtn = document.getElementById('backBtn');
 const continueWithoutBudgetBtn = document.querySelector('.btn-secondary');
-
-// ✅ Function to smoothly transition between steps
 function updateStep() {
     document.querySelectorAll('.container-box').forEach((step, index) => {
         const stepNumber = index + 1;
+
+        console.log(`Updating Step: ${stepNumber}, Current Step: ${currentStep}`); // Debugging log
 
         if (stepNumber === currentStep) {
             step.classList.remove('hidden', 'fade-out', 'slide-left', 'slide-right');
             step.classList.add('fade-in'); // ✅ Smooth fade-in for active step
         } else {
             step.classList.remove('fade-in');
-            step.classList.add('hidden'); // ✅ Hide inactive steps immediately
+            step.classList.add('hidden'); // ✅ Hide inactive steps
         }
     });
 
@@ -29,6 +29,7 @@ function updateStep() {
     progressBar.style.transition = "width 0.5s ease";
     progressBar.style.width = `${(currentStep / totalSteps) * 100}%`;
 }
+
 
 // ✅ Next Button Click (Only Slide Out Current Step)
 nextBtn.addEventListener('click', function () {
@@ -179,57 +180,219 @@ document.getElementById('selectedSkills').addEventListener('click', function (ev
 document.querySelectorAll('.skill-badge').forEach(skill => {
     skill.innerHTML = `<i class="fas fa-plus"></i> ${skill.textContent}`;
 });
-function toggleSection(sectionId) {
-    let section = document.getElementById(sectionId);
-
-    // ✅ Toggle visibility
-    if (section.style.display === 'none' || section.style.display === '') {
-        section.style.display = 'flex';
-    } else {
-        section.style.display = 'none';
-    }
-}
-
 document.addEventListener("DOMContentLoaded", function () {
     let optionGroups = document.querySelectorAll(".option-group");
 
-    // ✅ Initially hide all option groups except the first one
+    // ✅ Hide all sections except the first one
     optionGroups.forEach((section, index) => {
         section.style.display = index === 0 ? "flex" : "none";
     });
 
-    // ✅ Handle option selection and group transitions
+    // ✅ Reference elements
+    let locationInputContainer = document.getElementById("jobLocationSection");
+    let locationContainer = document.getElementById("jobLocationContainer");
+    let addLocationBtn = document.getElementById("addLocationBtn");
+    let saveLocationBtn = document.getElementById("saveLocationBtn");
+    let educationSection = document.getElementById("educationSection");
+    let educationContainer = document.getElementById("educationContainer");
+    let addEducationBtn = document.getElementById("addEducationBtn");
+    let saveEducationBtn = document.getElementById("saveEducationBtn");
+    let skipLocation = false;
+
+    // ✅ Hide elements initially
+    if (locationInputContainer) locationInputContainer.style.display = "none";
+    if (educationSection) educationSection.style.display = "none";
+    if (educationContainer) educationContainer.style.display = "none";
+    if (addEducationBtn) addEducationBtn.style.display = "none";
+    if (saveEducationBtn) saveEducationBtn.style.display = "none";
+    if (addLocationBtn) addLocationBtn.style.display = "none";
+    if (saveLocationBtn) saveLocationBtn.style.display = "none";
+
+    // ✅ Handle option selection and transitions
     optionGroups.forEach((group, index) => {
-        if (!group.classList.contains("budget-group")) {
-            group.querySelectorAll(".option").forEach(option => {
-                option.addEventListener("click", function () {
-                    let input = this.querySelector("input");
-                    if (input) {
-                        input.checked = true;
+        group.querySelectorAll(".option").forEach(option => {
+            option.addEventListener("click", function () {
+                let input = this.querySelector("input");
+                if (input) {
+                    input.checked = true;
 
-                        // Remove 'selected' class from other options in the same group
-                        document.querySelectorAll(`input[name="${input.name}"]`).forEach(radio => {
-                            radio.parentElement.classList.remove("selected");
-                        });
+                    document.querySelectorAll(`input[name="${input.name}"]`).forEach(radio => {
+                        radio.parentElement.classList.remove("selected");
+                    });
 
-                        // Add 'selected' class to the clicked option
-                        this.classList.add("selected");
+                    this.classList.add("selected");
 
-                        // Hide current option group and show the next one
+                    if (group.id === "workModeSection") {
+                        skipLocation = input.value.toLowerCase() === "online";
+                    }
+
+                    if (group.id === "experienceSection") {
                         setTimeout(() => {
                             group.style.display = "none";
-
-                            // ✅ Show the next option group (if available)
-                            let nextGroup = optionGroups[index + 1];
-                            if (nextGroup && nextGroup.classList.contains("option-group")) {
-                                nextGroup.style.display = "flex";
-                            }
+                            skipLocation ? showEducationSection() : showJobLocationSection();
                         }, 300);
+                        return;
                     }
-                });
+
+                    setTimeout(() => {
+                        group.style.display = "none";
+                        let nextGroup = optionGroups[index + 1];
+                        if (nextGroup) {
+                            nextGroup.style.display = "flex";
+                        }
+                    }, 300);
+                }
             });
-        }
+        });
     });
+
+    // ✅ Function to Show Job Location Section
+    function showJobLocationSection() {
+        locationInputContainer.style.display = "flex";
+        addLocationBtn.style.display = "inline-block";
+        saveLocationBtn.style.display = "inline-block";
+
+        if (locationContainer.children.length === 0) {
+            addLocationField();
+        }
+    }
+
+    // ✅ Handle Save Button for Job Location
+    if (saveLocationBtn) {
+        saveLocationBtn.addEventListener("click", function () {
+            hideJobLocationSection();
+            showEducationSection();
+        });
+    }
+
+    // ✅ Handle Adding & Removing Job Location Fields
+    if (addLocationBtn) {
+        addLocationBtn.addEventListener("click", function () {
+            addLocationField();
+        });
+    }
+
+    function hideJobLocationSection() {
+        locationInputContainer.style.display = "none";
+        addLocationBtn.style.display = "none";
+        saveLocationBtn.style.display = "none";
+    }
+
+    function addLocationField() {
+        let newField = document.createElement("div");
+        newField.classList.add("location-input");
+        newField.innerHTML = `
+            <input type="text" class="custom-input" placeholder="Enter Job Location">
+            <button type="button" class="remove-btn">🗑️</button>
+        `;
+
+        locationContainer.appendChild(newField);
+        locationContainer.style.display = "block";
+        newField.querySelector("input").focus();
+
+        newField.querySelector(".remove-btn").addEventListener("click", function () {
+            removeLocationField(newField);
+        });
+    }
+
+    function removeLocationField(field) {
+        field.remove();
+        if (locationContainer.children.length === 0) {
+            addLocationField();
+        }
+    }
+
+    if (saveEducationBtn) {
+        saveEducationBtn.addEventListener("click", function () {
+            hideEducationSection();
+        });
+    }
+
+    if (addEducationBtn) {
+        addEducationBtn.addEventListener("click", function () {
+            addEducationField();
+        });
+    }
+
+    function showEducationSection() {
+        educationSection.style.display = "flex";
+        educationContainer.style.display = "block";
+        addEducationBtn.style.display = "inline-block";
+        saveEducationBtn.style.display = "inline-block";
+
+        if (educationContainer.children.length === 0) {
+            addEducationField();
+        }
+    }
+
+    function hideEducationSection() {
+        educationSection.style.display = "none";
+        addEducationBtn.style.display = "none";
+        saveEducationBtn.style.display = "none";
+    }
+
+    function addEducationField() {
+        let newField = document.createElement("div");
+        newField.classList.add("edu-input");
+        newField.innerHTML = `
+            <input type="text" class="custom-input" placeholder="Enter qualification (e.g., B.Sc in Mathematics)">
+            <button type="button" class="remove-btn">🗑️</button>
+        `;
+
+        educationContainer.appendChild(newField);
+        educationContainer.style.display = "block";
+        newField.querySelector("input").focus();
+
+        newField.querySelector(".remove-btn").addEventListener("click", function () {
+            removeEducationField(newField);
+        });
+    }
+
+    function removeEducationField(field) {
+        field.remove();
+        if (educationContainer.children.length === 0) {
+            addEducationField();
+        }
+    }
+
+    document.querySelectorAll(".edit-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            let sectionId = this.getAttribute("data-target");
+            reopenSection(sectionId);
+        });
+    });
+});
+function reopenSection(sectionId) {
+    console.log("Opening section:", sectionId); // Debugging log
+
+    let section = document.getElementById(sectionId);
+
+    if (!section) {
+        console.error("Section not found:", sectionId);
+        return; // Exit if section is not found
+    }
+
+    // Hide all sections
+    let allSections = document.querySelectorAll(".option-group, #jobLocationSection, #educationSection");
+    allSections.forEach(sec => sec.style.display = "none");
+
+    // Show the selected section
+    section.style.display = "flex";
+
+    // Special handling for Job Location
+    if (sectionId === "jobLocationSection") {
+        document.getElementById("jobLocationContainer").style.display = "block";
+        document.getElementById("addLocationBtn").style.display = "inline-block";
+        document.getElementById("saveLocationBtn").style.display = "inline-block";
+    }
+
+    // Special handling for Education Section
+    if (sectionId === "educationSection") {
+        document.getElementById("educationContainer").style.display = "block";
+        document.getElementById("addEducationBtn").style.display = "inline-block";
+        document.getElementById("saveEducationBtn").style.display = "inline-block";
+    }
+}
 
     // ✅ Handle budget selection separately
     document.querySelectorAll(".budget-group .option").forEach(option => {
@@ -248,4 +411,4 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
-});
+

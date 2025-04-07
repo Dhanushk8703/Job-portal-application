@@ -1,49 +1,32 @@
 package com.jobportal.app.spring_rest_api.service;
 
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.jobportal.app.spring_rest_api.model.Role;
 import com.jobportal.app.spring_rest_api.model.User;
 import com.jobportal.app.spring_rest_api.repository.UserRepository;
 
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-import java.util.Optional;
-
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = new BCryptPasswordEncoder();
+    public void addUser(User user) {
+        userRepository.save(user);
     }
 
-    // Save user with encrypted password
-    public User registerUser(String email, String password, String oauthToken) {
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password)); // Encrypt password
-        user.setOauthToken(oauthToken);
-        return userRepository.save(user);
-    }
-
-    // Update OAuth token for existing user
-    public User updateOAuthToken(String email, String oauthToken) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            user.setOauthToken(oauthToken);
-            return userRepository.save(user);
+    public boolean validateUser(String email, String password, Role role) {
+        // Fetch user by email
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            // Compare the provided password with the stored password
+            return user.get().getPassword().equals(password) && user.get().getRole().equals(role);
         }
-        return null;
+        return false;
     }
-
-    public Role getUserRole(String email) {
-        return userRepository.findByEmail(email)
-                .map(User::getRole) // Get the role from the User entity
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
-    }
+    
 }
-
