@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hireoscope - Settings</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .main-container {
+            flex: 1;
+            /* Ensures it takes the remaining space */
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .content {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 280px;
+            background: #1a104f;
+
+            color: #fff;
+            padding: 25px;
+
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+        }
+
+        .sidebar h2 {
+            text-transform: uppercase;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            padding: 15px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* Sidebar Hover Effect */
+        .sidebar ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: width 0.3s ease-in-out;
+        }
+
+        .sidebar ul li:hover::before {
+            width: 100%;
+        }
+
+        .sidebar ul li::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 0;
+            background: white;
+            transition: height 0.3s ease-in-out;
+        }
+
+        .sidebar ul li:hover::after,
+        .sidebar ul li.active::after {
+            height: 100%;
+        }
+
+        .tab-content {
+            flex: 1;
+            padding: 40px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h3 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .edit-btn {
+            color: blue;
+            cursor: pointer;
+            font-size: 16px;
+            float: right;
+        }
+
+        .edit-btn:hover {
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .card p {
+            font-size: 15px;
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+
+        .toggle-btn {
+            display: none;
+            /* Hide on large screens */
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -280px;
+                top: 0;
+                height: 100vh;
+                transition: left 0.3s ease-in-out;
+                z-index: 999;
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .toggle-btn {
+                display: block;
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                background: #000;
+                color: #fff;
+                padding: 10px 15px;
+                border-radius: 5px;
+                cursor: pointer;
+                z-index: 1000;
+            }
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .form-container:hover {
+            transform: scale(1.02);
+            box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-control {
+            border-radius: 10px;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            color: #333;
+            transition: all 0.3s ease-in-out;
+            box-shadow: inset 0px 3px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.15);
+            outline: none;
+        }
+
+        .btn-custom {
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            background: #333;
+            color: white;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-custom:hover {
+            background: #222;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-custom:active {
+            transform: translateY(0);
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+
+        @media (max-width: 576px) {
+            .form-container {
+                padding: 20px;
+            }
+
+            .btn-custom {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="content">
+        <div class="toggle-btn" onclick="toggleSidebar()">☰</div>
+        <div class="sidebar" id="sidebar">
+            <h2>Settings</h2>
+            <ul>
+                <li class="tab-item active" data-tab="myInfo">My Info</li>
+                <li class="tab-item" data-tab="billing">Billing & Payments</li>
+                <li class="tab-item" data-tab="security">Password & Security</li>
+                <li class="tab-item" data-tab="notifications">Notification Settings</li>
+                <li class="tab-item" data-tab="services">Connected Services</li>
+            </ul>
+        </div>
+
+        <div class="main-container">
+            <div class="tab-content active" id="myInfo">
+                <h2>My Info</h2>
+                <div class="card">
+                    <h3>Account <span class="edit-btn" id="editButton">✎ Edit</span></h3>
+                    <div id="accountView">
+                        <p><strong>Name:</strong> <span id="displayName" th:text="${userName}">Varun K</span></p>
+                        <p><strong>Email:</strong> <span id="displayEmail" th:text="${userEmail}">example@mail.com</span></p>
+                    </div>
+
+                    <form id="accountEditForm" class="hidden">
+                        <div class="mb-3">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="firstName" th:value="${firstName}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" th:value="${lastName}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" th:value="${userEmail}">
+                        </div>
+                        <div class="d-flex flex-wrap">
+                            <button type="button" class="btn btn-custom btn-save me-2" id="saveBtn">Save</button>
+                            <button type="button" class="btn btn-custom btn-cancel" id="cancelBtn">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="company-card card p-3">
+                    <h3>Company Details <span class="edit-btn text-primary" style="cursor: pointer;">✎ Edit</span></h3>
+                    <div class="text-center">
+                        <img id="displayCompanyLogo" th:src="@{/images/default-logo.png}" class="img-fluid rounded-circle mb-3" width="100">
+                    </div>
+                    <p><strong>Company Name:</strong> <span id="displayCompanyName" th:text="${companyName}">Varun K</span></p>
+                    <p><strong>Company Type:</strong> <span id="displayCompanyType" th:text="${companyType}">Private</span></p>
+                    <p><strong>Industry:</strong> <span id="displayIndustry" th:text="${industry}">IT Services</span></p>
+                    <p><strong>Company Size:</strong> <span id="displayCompanySize" th:text="${companySize}">10-99 employees</span></p>
+                    <p><strong>Website:</strong> <a href="#" id="displayCompanyWebsite" th:href="${companyWebsite}" target="_blank">www.example.com</a></p>
+                    <p><strong>LinkedIn:</strong> <a href="#" id="displayLinkedIn" th:href="${linkedinProfile}" target="_blank">linkedin.com/company</a></p>
+                    <p><strong>Description:</strong> <span id="displayCompanyDescription" th:text="${companyDescription}">A leading tech firm</span></p>
+                </div>
+            </div>
+
+            <div class="tab-content hidden" id="billing">
+                <h2>Billing & Payments</h2>
+                <div class="card p-3">
+                    <h3>Payment History</h3>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Transaction ID</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Billing history data can be inserted dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content hidden" id="security">
+                <h2>Password & Security</h2>
+                <div class="card p-4">
+                    <h3>Change Password</h3>
+                    <form id="changePasswordForm">
+                        <div class="mb-3">
+                            <label class="form-label">Current Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password">
+                                <span class="input-group-text toggle-password" onclick="togglePassword('currentPassword')">👁</span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">New Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="newPassword" placeholder="Enter new password">
+                                <span class="input-group-text toggle-password" onclick="togglePassword('newPassword')">👁</span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Confirm New Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="confirmPassword" placeholder="Re-enter new password">
+                                <span class="input-group-text toggle-password" onclick="togglePassword('confirmPassword')">👁</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Update Password</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+ // Hardcoded current password (for now)
+const HARD_CODED_PASSWORD = "Admin@123";
+
+// Elements
+const currentPasswordInput = document.getElementById("currentPassword");
+const newPasswordInput = document.getElementById("newPassword");
+const confirmPasswordInput = document.getElementById("confirmPassword");
+const updatePasswordBtn = document.getElementById("updatePasswordBtn");
+const currentPasswordMsg = document.getElementById("currentPasswordMsg");
+const passwordStrength = document.getElementById("passwordStrength");
+const passwordMatch = document.getElementById("passwordMatch");
+
+// Check current password
+currentPasswordInput.addEventListener("input", function () {
+    if (this.value === HARD_CODED_PASSWORD) {
+        currentPasswordMsg.textContent = "Password Matched ✔";
+        currentPasswordMsg.style.color = "green";
+        newPasswordInput.disabled = false;
+        confirmPasswordInput.disabled = false;
+        updatePasswordBtn.disabled = false;
+    } else {
+        currentPasswordMsg.textContent = "Incorrect Password ❌";
+        currentPasswordMsg.style.color = "red";
+        newPasswordInput.disabled = true;
+        confirmPasswordInput.disabled = true;
+        updatePasswordBtn.disabled = true;
+    }
+});
+
+// Show/Hide Password Function
+function togglePassword(fieldId) {
+    let field = document.getElementById(fieldId);
+    field.type = field.type === "password" ? "text" : "password";
+}
+
+// Password Strength Indicator
+newPasswordInput.addEventListener("input", function () {
+    let password = this.value;
+
+    if (password.length < 6) {
+        passwordStrength.textContent = "Weak Password (Min 6 chars)";
+        passwordStrength.style.color = "red";
+    } else if (password.match(/[A-Z]/) && password.match(/[0-9]/)) {
+        passwordStrength.textContent = "Strong Password";
+        passwordStrength.style.color = "green";
+    } else {
+        passwordStrength.textContent = "Medium Strength Password";
+        passwordStrength.style.color = "orange";
+    }
+});
+
+// Confirm Password Match
+confirmPasswordInput.addEventListener("input", function () {
+    if (this.value !== newPasswordInput.value) {
+        passwordMatch.textContent = "Passwords do not match!";
+    } else {
+        passwordMatch.textContent = "";
+    }
+});
+
+// Form Submit
+document.getElementById("changePasswordForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+    
+    if (newPasswordInput.value !== confirmPasswordInput.value) {
+        alert("Passwords do not match!");
+        return;
+    }
+
+    alert("Password updated successfully!");
+});
+
+        document.addEventListener("DOMContentLoaded", function () {
+            /*** TAB SWITCHING FUNCTIONALITY ***/
+            const tabs = document.querySelectorAll(".tab-item");
+            const tabContents = document.querySelectorAll(".tab-content");
+
+            tabs.forEach(tab => {
+                tab.addEventListener("click", function () {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove("active"));
+                    // Hide all tab contents
+                    tabContents.forEach(tc => tc.classList.add("hidden"));
+
+                    // Add active class to clicked tab
+                    this.classList.add("active");
+                    // Show the associated content
+                    document.getElementById(this.dataset.tab).classList.remove("hidden");
+                });
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            /*** ACCOUNT DETAILS ***/
+            const editAccountButton = document.getElementById("editButton");
+            const accountView = document.getElementById("accountView");
+            const accountEditForm = document.getElementById("accountEditForm");
+            const saveAccountBtn = document.getElementById("saveBtn");
+            const cancelAccountBtn = document.getElementById("cancelBtn");
+
+            if (editAccountButton) {
+                editAccountButton.addEventListener("click", function () {
+                    toggleVisibility(accountView, accountEditForm, true);
+
+                    document.getElementById("firstName").value = getText("displayName").split(" ")[0] || "";
+                    document.getElementById("lastName").value = getText("displayName").split(" ")[1] || "";
+                    document.getElementById("email").value = getText("displayEmail");
+                });
+            }
+
+            if (cancelAccountBtn) {
+                cancelAccountBtn.addEventListener("click", function () {
+                    toggleVisibility(accountView, accountEditForm, false);
+                });
+            }
+
+            if (saveAccountBtn) {
+                saveAccountBtn.addEventListener("click", function () {
+                    const firstName = getValue("firstName");
+                    const lastName = getValue("lastName");
+                    const email = getValue("email");
+
+                    if (!firstName || !lastName || !email) {
+                        alert("Please fill out all account details.");
+                        return;
+                    }
+
+                    setText("displayName", `${firstName} ${lastName}`);
+                    setText("displayEmail", email);
+                    toggleVisibility(accountView, accountEditForm, false);
+                });
+            }
+
+         /*** COMPANY DETAILS ***/
+const editCompanyBtn = document.querySelector(".company-card .edit-btn");
+const companyCard = document.querySelector(".company-card");
+const companyForm = document.querySelector(".company-form");
+const saveCompanyBtn = document.getElementById("saveCompanyBtn");
+const cancelCompanyBtn = document.querySelector(".company-form .cancel-btn");
+
+// Select input fields
+const companyNameInput = document.getElementById("companyName");
+const companyTypeInput = document.getElementById("companyType");
+const industryInput = document.getElementById("industry");
+const companySizeInput = document.getElementById("companySize");
+const companyWebsiteInput = document.getElementById("companyWebsite");
+const linkedinProfileInput = document.getElementById("linkedinProfile");
+const companyDescriptionInput = document.getElementById("companyDescription");
+const companyLogoInput = document.getElementById("companyLogo");
+const previewLogo = document.getElementById("previewLogo");
+
+// Select display fields
+const displayCompanyName = document.getElementById("displayCompanyName");
+const displayCompanyType = document.getElementById("displayCompanyType");
+const displayIndustry = document.getElementById("displayIndustry");
+const displayCompanySize = document.getElementById("displayCompanySize");
+const displayCompanyWebsite = document.getElementById("displayCompanyWebsite");
+const displayLinkedIn = document.getElementById("displayLinkedIn");
+const displayCompanyDescription = document.getElementById("displayCompanyDescription");
+const displayCompanyLogo = document.getElementById("displayCompanyLogo");
+
+// Function to toggle visibility between card & form
+function toggleVisibility(showCard, showForm, isEditing) {
+    showCard.style.display = isEditing ? "none" : "block";
+    showForm.style.display = isEditing ? "block" : "none";
+}
+
+// Function to get text from display fields
+function getText(id) {
+    return document.getElementById(id).textContent.trim();
+}
+
+// Function to set text in display fields
+function setText(id, value) {
+    document.getElementById(id).textContent = value;
+}
+
+// Function to get input values
+function getValue(id) {
+    return document.getElementById(id).value.trim();
+}
+
+// Handle Edit Button Click
+if (editCompanyBtn) {
+    editCompanyBtn.addEventListener("click", function () {
+        toggleVisibility(companyCard, companyForm, true);
+
+        companyNameInput.value = getText("displayCompanyName");
+        companyTypeInput.value = getText("displayCompanyType");
+        industryInput.value = getText("displayIndustry");
+        companySizeInput.value = getText("displayCompanySize");
+        companyWebsiteInput.value = getText("displayCompanyWebsite");
+        linkedinProfileInput.value = displayLinkedIn.href;
+        companyDescriptionInput.value = getText("displayCompanyDescription");
+    });
+}
+
+// Handle Cancel Button Click
+if (cancelCompanyBtn) {
+    cancelCompanyBtn.addEventListener("click", function () {
+        toggleVisibility(companyCard, companyForm, false);
+    });
+}
+
+// Handle Save Button Click
+if (saveCompanyBtn) {
+    saveCompanyBtn.addEventListener("click", function () {
+        const companyName = getValue("companyName");
+        const companyType = getValue("companyType");
+        const industry = getValue("industry");
+        const companySize = getValue("companySize");
+        const companyWebsite = getValue("companyWebsite");
+        const linkedinProfile = getValue("linkedinProfile");
+        const companyDescription = getValue("companyDescription");
+
+        if (!companyName || !companyType || !industry || !companySize || !companyWebsite) {
+            alert("Please fill out all company details.");
+            return;
+        }
+
+        setText("displayCompanyName", companyName);
+        setText("displayCompanyType", companyType);
+        setText("displayIndustry", industry);
+        setText("displayCompanySize", companySize);
+        displayCompanyWebsite.href = companyWebsite;
+        displayCompanyWebsite.textContent = companyWebsite;
+        displayLinkedIn.href = linkedinProfile;
+        displayLinkedIn.textContent = linkedinProfile;
+        setText("displayCompanyDescription", companyDescription);
+
+        // Handle Company Logo Upload
+        if (companyLogoInput.files.length > 0) {
+            const file = companyLogoInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                displayCompanyLogo.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        toggleVisibility(companyCard, companyForm, false);
+    });
+}
+
+// Handle Logo Preview
+if (companyLogoInput) {
+    companyLogoInput.addEventListener("change", function () {
+        if (companyLogoInput.files.length > 0) {
+            const file = companyLogoInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                previewLogo.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+}
+
+            /*** COMPANY CONTACTS ***/
+            const editContactsBtn = document.querySelector(".company-contacts .edit-btn");
+            const contactsCard = document.querySelector(".company-contacts");
+            const contactsForm = document.querySelector(".company-contacts-form");
+            const saveContactsBtn = document.getElementById("saveCompanyContactsBtn");
+            const cancelContactsBtn = document.querySelector(".company-contacts-form .cancel-btn");
+
+            if (editContactsBtn) {
+                editContactsBtn.addEventListener("click", function () {
+                    toggleVisibility(contactsCard, contactsForm, true);
+
+                    document.getElementById("ownerName").value = getText("displayOwner");
+                    document.getElementById("companyPhone").value = getText("displayCompanyPhone");
+
+                    const addressParts = (getText("displayCompanyAddress") || "").split(", ");
+                    document.getElementById("doorNo").value = addressParts[0] || "";
+                    document.getElementById("street").value = addressParts[1] || "";
+                    document.getElementById("landmark").value = addressParts[2] || "";
+                    document.getElementById("city").value = addressParts[3] || "";
+                    document.getElementById("state").value = addressParts[4] || "";
+                    document.getElementById("country").value = addressParts[5]?.split(" - ")[0] || "";
+                    document.getElementById("pincode").value = addressParts[5]?.split(" - ")[1] || "";
+                });
+            }
+
+            if (cancelContactsBtn) {
+                cancelContactsBtn.addEventListener("click", function () {
+                    toggleVisibility(contactsCard, contactsForm, false);
+                });
+            }
+
+            if (saveContactsBtn) {
+                saveContactsBtn.addEventListener("click", function () {
+                    const ownerName = getValue("ownerName");
+                    const companyPhone = getValue("companyPhone");
+
+                    const doorNo = getValue("doorNo");
+                    const street = getValue("street");
+                    const landmark = getValue("landmark");
+                    const city = getValue("city");
+                    const state = getValue("state");
+                    const country = getValue("country");
+                    const pincode = getValue("pincode");
+
+                    let addressParts = [doorNo, street, landmark, city, state, country].filter(Boolean);
+                    let fullAddress = addressParts.join(", ") + (pincode ? ` - ${pincode}` : "");
+
+                    if (!ownerName || !companyPhone || !fullAddress.trim()) {
+                        alert("Please fill out all contact details.");
+                        return;
+                    }
+
+                    setText("displayOwner", ownerName);
+                    setText("displayCompanyPhone", companyPhone);
+                    setText("displayCompanyAddress", fullAddress);
+
+                    toggleVisibility(contactsCard, contactsForm, false);
+                });
+            }
+
+            /*** HELPER FUNCTIONS ***/
+            function toggleVisibility(view, form, isEditing) {
+                if (view && form) {
+                    view.style.display = isEditing ? "none" : "block";
+                    form.style.display = isEditing ? "block" : "none";
+                }
+            }
+
+            function getText(id) {
+                return document.getElementById(id)?.textContent.trim() || "";
+            }
+
+            function setText(id, value) {
+                if (document.getElementById(id)) {
+                    document.getElementById(id).textContent = value;
+                }
+            }
+
+            function getValue(id) {
+                return document.getElementById(id)?.value.trim() || "";
+            }
+        });
+
+
+
+    </script>
+
+</body>
+</html>

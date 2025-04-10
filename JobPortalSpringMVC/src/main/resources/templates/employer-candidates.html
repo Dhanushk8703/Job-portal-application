@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/employer_style.css}">
+    <style>
+        .job-card {
+            border-radius: 12px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa, #e3e7ee);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: border 0.3s ease-in-out;
+            border: 1px solid transparent;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+        }
+
+        .job-card:hover {
+            border: 1px solid #0056b3;
+        }
+
+        .company-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .details {
+            flex-grow: 1;
+            padding: 0 15px;
+        }
+
+        .details h5 {
+            margin: 0;
+            font-weight: 500;
+            font-size: 15px;
+            color: #222;
+        }
+
+        .details p {
+            margin: 4px 0 0;
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        .total-applied {
+            font-size: 13px;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 15px;
+            background: #0056b3;
+            color: white;
+        }
+
+        .content .nav-tabs {
+            border-bottom: none;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .content .nav-tabs .nav-item .nav-link {
+            border: none;
+            color: #040307;
+            font-size: 14px;
+            padding: 10px 15px;
+            transition: all 0.3s ease-in-out;
+            border-radius: 8px;
+            background: rgba(26, 16, 79, 0.1);
+            font-weight: 500;
+        }
+
+        .content .nav-tabs .nav-item .nav-link.active {
+            background: linear-gradient(135deg, #1a104f, #3a2f7a);
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(26, 16, 79, 0.3);
+        }
+
+        .content .tab-content {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #fff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .content .nav-tabs .nav-item {
+            list-style: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Candidate List Container */
+        .candidate-list-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 0;
+            /* Remove extra padding */
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        /* "Others Applied" Header */
+        .candidate-list-header {
+            background: linear-gradient(to right, #673AB7, #512DA8);
+            /* Slightly darker for contrast */
+            color: white;
+            font-weight: bold;
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            width: calc(100% - 20px);
+            /* Adjust width to fit inside padding */
+            margin: 10px auto;
+            /* Centers it properly */
+            display: block;
+        }
+
+
+        /* Placeholder color */
+        .search-bar::placeholder {
+            color: #ddd;
+        }
+
+        /* Candidate List Items */
+        .list-group {
+            padding: 0;
+            /* Remove default padding */
+        }
+
+        .list-group-item {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 15px 20px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            position: relative;
+        }
+
+        /* Horizontal line between candidates */
+        .list-group-item:not(:last-child) {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Hover Effect */
+        .list-group-item:hover,
+        .list-group-item.active {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateX(5px);
+        }
+
+        /* Add a user icon before the candidate name */
+        .list-group-item::before {
+            content: "👤";
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        /* Ensure text inside the candidate list and experience is readable */
+        .list-group-item,
+        .experience li {
+            color: #333 !important;
+            /* Ensures dark text */
+            font-weight: 500;
+        }
+
+        /* Fix the 'Others Applied' title color */
+        h5.text-light {
+            color: white !important;
+            /* Ensures contrast */
+        }
+
+        /* Candidate Details */
+        .candidate-details-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            overflow: hidden;
+        }
+
+        .candidate-header {
+            background: linear-gradient(to right, #673AB7, #512DA8);
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .candidate-avatar {
+            width: 80px;
+            height: 80px;
+            border: 3px solid white;
+            margin-bottom: 10px;
+        }
+
+        .text-dark {
+            color: #333 !important;
+        }
+
+        .buttons {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            /* Moves buttons to the right */
+            padding-right: 20px;
+            /* Adds some spacing from the right edge */
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+
+        .btn {
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            padding: 8px 16px;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .shortlist-btn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .reject-btn {
+            background: #E53935;
+            color: white;
+        }
+
+        .description,
+        .experience {
+            color: #333;
+            /* Dark text for visibility */
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="d-flex">
+        <div class="sidebar d-lg-flex d-none">
+            <ul class="nav-links">
+                <li class="nav-item"><a th:href="@{/employer/home}" class="nav-link" onclick="setActive(this)"><i
+                            class="fa-solid fa-chart-line"></i><span>Dashboard</span></a></li>
+                <li class="nav-item"><a th:href="@{/employer/myjobs}" class="nav-link" onclick="setActive(this)"><i
+                            class="fa-solid fa-briefcase"></i><span>My Jobs</span></a></li>
+                <li class="nav-item"><a href="@{/employer/candidates}" class="nav-link active"
+                        onclick="setActive(this)"><i class="fa-solid fa-users"></i><span>Candidates</span></a></li>
+                <li class="nav-item"><a href="#" class="nav-link" onclick="setActive(this)"><i
+                            class="fa-solid fa-envelope"></i><span>Messages</span></a></li>
+                <li class="nav-item"><a href="#" class="nav-link" onclick="setActive(this)"><i
+                            class="fa-solid fa-calendar-check"></i><span>Schedules</span></a></li>
+            </ul>
+        </div>
+
+        <div class="main-layout">
+            <div class="topbar d-flex justify-content-between p-3">
+                <h4>Hireoscope</h4>
+                <div>
+                    <button class="btn btn-light" th:onclick="|window.location.href='@{/employer/postjob}'|">
+                        <i class="fa-solid fa-plus"></i> <span>Post a Job</span>
+                    </button>
+
+                    <button class="btn btn-light" th:onclick="|window.location.href='@{/employer/profile}'|">
+                        <i class="fa-solid fa-cog"></i> <span>Settings</span>
+                    </button>
+
+                    <button class="btn btn-light" th:onclick="|window.location.href='@{/logout}'|">
+                        <i class="fa-solid fa-sign-out-alt"></i> <span>Log out</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content container">
+            <div id="job-list">
+                <div class="row g-4">
+                    <div class="col-md-6" th:each="i : ${#numbers.sequence(1,5)}">
+                        <div class="job-card" onclick="showJobDetails('Frontend Developer')">
+                            <img th:src="@{/company-logo.png}" alt="Company Logo" class="company-logo">
+                            <div class="details">
+                                <h5>Frontend Developer</h5>
+                                <p>Post At Freelancer</p>
+                            </div>
+                            <div class="total-applied">98 Applied</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="job-details" class="d-none">
+                <ul class="nav nav-tabs" id="jobTabs">
+                    <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#all-applied">All
+                            Applied</a></li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#shortlisted">Shortlisted</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#rejected">Rejected</a></li>
+                </ul>
+
+                <div class="tab-content mt-3">
+                    <!-- All Applied -->
+                    <div class="tab-pane fade show active" id="all-applied">
+                        <div class="container mt-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="rounded-4 shadow-lg candidate-list-container">
+                                        <div class="candidate-list-header">Others Applied</div>
+                                        <input type="text" id="search" placeholder="Search candidates..."
+                                            class="form-control search-bar">
+                                        <ul class="list-group border-0" id="candidate-list"></ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div id="candidate-details"
+                                        class="d-none rounded-4 shadow-lg candidate-details-card">
+                                        <div class="candidate-header d-flex justify-content-between align-items-center">
+                                            <div class="text-center w-100">
+                                                <img id="candidate-avatar" src="" alt="Candidate"
+                                                    class="rounded-circle candidate-avatar">
+                                                <h3 id="candidate-name" class="fw-bold text-light"></h3>
+                                                <p id="candidate-title" class="text-light"></p>
+                                            </div>
+                                        </div>
+                                        <div class="buttons">
+                                            <button class="btn btn-success fw-bold shortlist-btn"
+                                                onclick="moveCandidate('shortlisted')">Shortlist</button>
+                                            <button class="btn btn-danger fw-bold reject-btn"
+                                                onclick="moveCandidate('rejected')">Reject</button>
+                                        </div>
+                                        <div class="p-4">
+                                            <h5 class="fw-bold text-dark">Description</h5>
+                                            <p id="candidate-description" class="text-dark"></p>
+                                            <h5 class="mt-4 fw-bold text-dark">Experience</h5>
+                                            <ul id="candidate-experience" class="list-group list-group-flush"></ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shortlisted -->
+                    <div class="tab-pane fade" id="shortlisted">
+                        <div class="container mt-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="rounded-4 shadow-lg candidate-list-container">
+                                        <div class="candidate-list-header">Shortlisted Candidates</div>
+                                        <ul class="list-group border-0" id="shortlisted-list"></ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div id="candidate-details"
+                                        class="d-none rounded-4 shadow-lg candidate-details-card">
+                                        <div class="candidate-header d-flex justify-content-between align-items-center">
+                                            <div class="text-center w-100">
+                                                <img id="candidate-avatar" src="" alt="Candidate"
+                                                    class="rounded-circle candidate-avatar">
+                                                <h3 id="candidate-name" class="fw-bold text-light"></h3>
+                                                <p id="candidate-title" class="text-light"></p>
+                                            </div>
+                                        </div>
+                                        <div class="p-4">
+                                            <h5 class="fw-bold text-dark">Description</h5>
+                                            <p id="candidate-description" class="text-dark"></p>
+                                            <h5 class="mt-4 fw-bold text-dark">Experience</h5>
+                                            <ul id="candidate-experience" class="list-group list-group-flush"></ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rejected -->
+                    <div class="tab-pane fade" id="rejected">
+                        <div class="container mt-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="rounded-4 shadow-lg candidate-list-container">
+                                        <div class="candidate-list-header">Rejected Candidates</div>
+                                        <ul class="list-group border-0" id="rejected-list"></ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div id="candidate-details"
+                                        class="d-none rounded-4 shadow-lg candidate-details-card">
+                                        <div class="candidate-header d-flex justify-content-between align-items-center">
+                                            <div class="text-center w-100">
+                                                <img id="candidate-avatar" src="" alt="Candidate"
+                                                    class="rounded-circle candidate-avatar">
+                                                <h3 id="candidate-name" class="fw-bold text-light"></h3>
+                                                <p id="candidate-title" class="text-light"></p>
+                                            </div>
+                                        </div>
+                                        <div class="p-4">
+                                            <h5 class="fw-bold text-dark">Description</h5>
+                                            <p id="candidate-description" class="text-dark"></p>
+                                            <h5 class="mt-4 fw-bold text-dark">Experience</h5>
+                                            <ul id="candidate-experience" class="list-group list-group-flush"></ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-secondary mt-3" onclick="goBack()">Back</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="floating-menu d-lg-none" onclick="toggleMenu()">
+        <i class="fa-solid fa-plus"></i>
+        <div class="menu-item"><i class="fa-solid fa-users"></i></div>
+        <div class="menu-item"><i class="fa-solid fa-user-clock"></i></div>
+        <div class="menu-item"><i class="fa-solid fa-bell"></i></div>
+        <div class="menu-item"><i class="fa-solid fa-calendar-days"></i></div>
+        <div class="menu-item"><i class="fa-solid fa-cog"></i></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/dashscript.js}"></script>
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".job-card").forEach(card => {
+                card.addEventListener("click", function () {
+                    let jobTitle = this.querySelector("h5").textContent; // Get job title dynamically
+                    showJobDetails(jobTitle);
+                });
+            });
+        });
+
+        function showJobDetails(jobTitle) {
+            let jobList = document.getElementById('job-list');
+            let jobDetails = document.getElementById('job-details');
+            let jobTitleElement = document.getElementById('job-title');
+
+            if (jobList && jobDetails) {
+                jobList.classList.add('d-none'); // Hide job list properly
+                jobDetails.classList.remove('d-none'); // Show job details
+
+                if (jobTitleElement) {
+                    jobTitleElement.textContent = jobTitle;
+                }
+
+                // Activate the first tab correctly
+                let firstTab = new bootstrap.Tab(document.querySelector('#jobTabs .nav-link:first-child'));
+                firstTab.show();
+            }
+        }
+        function goBack() {
+            let jobList = document.getElementById('job-list');
+            let jobDetails = document.getElementById('job-details');
+
+            if (jobList && jobDetails) {
+                jobList.classList.remove('d-none');  // Show job list
+                jobDetails.classList.add('d-none');  // Hide job details
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const allCandidates = [
+                {
+                    id: 1,
+                    name: "Michael Alexandro",
+                    title: "UI/UX Designer",
+                    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+                    description: "Experienced UI/UX designer based in Indonesia...",
+                    experience: [
+                        { position: "Senior UI/UX Designer - Google", period: "Aug 2022 - Oct 2024" },
+                        { position: "Junior UI Designer - Traveloka", period: "Mar 2021 - Aug 2022" }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: "Sophia Johnson",
+                    title: "Frontend Developer",
+                    avatar: "https://randomuser.me/api/portraits/women/45.jpg",
+                    description: "Frontend developer specializing in React and Vue.js.",
+                    experience: [
+                        { position: "Frontend Developer - Amazon", period: "Jan 2023 - Present" },
+                        { position: "Junior Developer - Meta", period: "Apr 2021 - Dec 2022" }
+                    ]
+                },
+                {
+                    id: 3,
+                    name: "Daniel Smith",
+                    title: "Backend Developer",
+                    avatar: "https://randomuser.me/api/portraits/men/15.jpg",
+                    description: "Backend developer with expertise in Spring Boot and Node.js.",
+                    experience: [
+                        { position: "Backend Developer - Microsoft", period: "Jul 2022 - Present" },
+                        { position: "Software Engineer - IBM", period: "Feb 2020 - Jun 2022" }
+                    ]
+                }
+            ];
+
+            const shortlistedCandidates = [];
+            const rejectedCandidates = [];
+
+            function loadCandidates() {
+                updateCandidateList("#candidate-list", allCandidates);
+            }
+
+            function moveCandidate(status) {
+                const candidateName = document.getElementById("candidate-name").textContent;
+                if (!candidateName) {
+                    alert("No candidate selected!");
+                    return;
+                }
+
+                const candidateIndex = allCandidates.findIndex(c => c.name === candidateName);
+                if (candidateIndex === -1) return;
+
+                const candidate = allCandidates.splice(candidateIndex, 1)[0];
+
+                if (status === "shortlisted") {
+                    shortlistedCandidates.push(candidate);
+                    updateCandidateList("#shortlisted-list", shortlistedCandidates);
+                    showTab("shortlisted");
+                } else {
+                    rejectedCandidates.push(candidate);
+                    updateCandidateList("#rejected-list", rejectedCandidates);
+                    showTab("rejected");
+                }
+
+                updateCandidateList("#candidate-list", allCandidates);
+                document.getElementById("candidate-details").classList.add("d-none");
+            }
+
+            function updateCandidateList(listId, candidates) {
+                const listContainer = document.querySelector(listId);
+                listContainer.innerHTML = "";
+
+                candidates.forEach(candidate => {
+                    const listItem = document.createElement("li");
+                    listItem.className = "list-group-item";
+                    listItem.innerHTML = `
+                        <div class="d-flex align-items-center">
+                            <img src="${candidate.avatar}" class="rounded-circle" width="40" height="40" alt="Avatar">
+                            <div class="ms-3">
+                                <h6 class="fw-bold mb-0">${candidate.name}</h6>
+                                <p class="text-muted small mb-0">${candidate.title}</p>
+                            </div>
+                        </div>
+                    `;
+                    listItem.onclick = () => showCandidateDetails(candidate, listId);
+                    listContainer.appendChild(listItem);
+                });
+            }
+
+            function showCandidateDetails(candidate, listId) {
+                let detailsContainer;
+                if (listId === "#shortlisted-list") {
+                    detailsContainer = document.querySelector("#shortlisted #candidate-details");
+                } else if (listId === "#rejected-list") {
+                    detailsContainer = document.querySelector("#rejected #candidate-details");
+                } else {
+                    detailsContainer = document.querySelector("#all-applied #candidate-details");
+                }
+
+                if (!detailsContainer) return;
+
+                detailsContainer.classList.remove("d-none");
+                detailsContainer.querySelector("#candidate-avatar").src = candidate.avatar;
+                detailsContainer.querySelector("#candidate-name").textContent = candidate.name;
+                detailsContainer.querySelector("#candidate-title").textContent = candidate.title;
+                detailsContainer.querySelector("#candidate-description").textContent = candidate.description;
+
+                const experienceList = detailsContainer.querySelector("#candidate-experience");
+                experienceList.innerHTML = "";
+                candidate.experience.forEach(exp => {
+                    const li = document.createElement("li");
+                    li.className = "list-group-item";
+                    li.innerHTML = `<strong>${exp.position}</strong><br><span class="text-muted">${exp.period}</span>`;
+                    experienceList.appendChild(li);
+                });
+
+                detailsContainer.querySelector(".shortlist-btn").onclick = () => moveCandidate("shortlisted");
+                detailsContainer.querySelector(".reject-btn").onclick = () => moveCandidate("rejected");
+            }
+
+            function showTab(tabId) {
+                const tabTrigger = document.querySelector(`[data-bs-target="#${tabId}"]`);
+                if (tabTrigger) {
+                    const tab = new bootstrap.Tab(tabTrigger);
+                    tab.show();
+                }
+            }
+
+            loadCandidates();
+        });
+    </script>
+
+</body>
+
+</html>

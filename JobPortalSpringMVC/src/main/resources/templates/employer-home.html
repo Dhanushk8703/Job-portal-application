@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/employer_style.css}">
+    <style>
+        .card {
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .summary-card {
+            background: #e3f2fd;
+            border-left: 6px solid #007bff;
+        }
+
+        .summary-card h3 {
+            color: #007bff;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .summary-card p {
+            color: #555;
+            font-size: 16px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            max-width: 100%;
+            overflow: hidden;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: auto !important;
+            display: block;
+        }
+
+        .job-list li {
+            list-style: none;
+            padding: 12px;
+            font-size: 18px;
+            border-bottom: 2px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .job-list li i {
+            color: #007bff;
+        }
+
+        .job-views-card {
+            background: linear-gradient(135deg, #0047ab, #00c6ff);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .job-views-card::before {
+            content: "";
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            top: -30px;
+            right: -30px;
+        }
+
+        .job-views-card h5 {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+
+            .row .col-md-3,
+            .row .col-md-4,
+            .row .col-md-8 {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            .job-views-card {
+                padding: 20px;
+            }
+
+            .chart-container {
+                height: 250px;
+            }
+
+            .job-list li {
+                font-size: 16px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="d-flex">
+        <div class="sidebar d-lg-flex d-none">
+            <ul class="nav-links">
+                <li class="nav-item"><a href="#" class="nav-link active" onclick="setActive(this)"><i
+                            class="fa-solid fa-chart-line"></i><span>Dashboard</span></a></li>
+                <li class="nav-item"><a th:href="@{/employer/myjobs}" class="nav-link" onclick="setActive(this)"><i
+                            class="fa-solid fa-briefcase"></i><span>My Jobs</span></a></li>
+                <li class="nav-item"><a th:href="@{/employer/candidates}" class="nav-link" onclick="setActive(this)"><i
+                            class="fa-solid fa-users"></i><span>Candidates</span></a></li>
+                <li class="nav-item"><a href="#" class="nav-link" onclick="setActive(this)"><i
+                            class="fa-solid fa-envelope"></i><span>Messages</span></a></li>
+                <li class="nav-item"><a href="#" class="nav-link" onclick="setActive(this)"><i
+                            class="fa-solid fa-calendar-check"></i><span>Schedules</span></a></li>
+            </ul>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <div class="topbar d-flex justify-content-between p-3">
+                <h4>Hireoscope</h4>
+                <div>
+                    <button class="btn btn-light" th:onclick="|window.location.href='@{/employer/postjob}'|">
+                        <i class="fa-solid fa-plus"></i> <span>Post a Job</span>
+                    </button>
+
+                    <button class="btn btn-light" th:onclick="|window.location.href='@{/employer/profile}'|">
+                        <i class="fa-solid fa-cog"></i> <span>Settings</span>
+                    </button>
+
+                    <button class="btn btn-light" th:onclick="|window.location.href='@{/logout}'|">
+                        <i class="fa-solid fa-sign-out-alt"></i> <span>Log out</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="content container">
+                <h2 class="mb-4">Dashboard</h2>
+                <div class="row mb-4">
+                    <div class="col-md-3 col-sm-6">
+                        <div class="card summary-card">
+                            <h3>07</h3>
+                            <p>Posted Jobs</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="card summary-card">
+                            <h3>03</h3>
+                            <p>Shortlisted</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="card summary-card">
+                            <h3>1.7k</h3>
+                            <p>Applications</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="card summary-card">
+                            <h3>04</h3>
+                            <p>Saved Candidates</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="job-views-card">
+                            <h5>Job Views</h5>
+                            <div class="chart-container">
+                                <canvas id="jobViewsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <h5>Posted Jobs</h5>
+                            <ul class="job-list">
+                                <li><span>Web & Mobile Prototype</span> <i class="fa-solid fa-briefcase"></i></li>
+                                <li><span>Document Writer</span> <i class="fa-solid fa-file-alt"></i></li>
+                                <li><span>Outbound Call Service</span> <i class="fa-solid fa-phone"></i></li>
+                                <li><span>Product Designer</span> <i class="fa-solid fa-paint-brush"></i></li>
+                                <li><span>Marketing Specialist</span> <i class="fa-solid fa-bullhorn"></i></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="floating-menu d-lg-none" onclick="toggleMenu()">
+        <i class="fa-solid fa-plus"></i>
+        <div class="menu-item"><i class="fa-solid fa-users"></i></div>
+        <div class="menu-item"><i class="fa-solid fa-user-clock"></i></div>
+        <div class="menu-item"><i class="fa-solid fa-bell"></i></div>
+        <div class="menu-item"><i class="fa-solid fa-calendar-days"></i></div>
+        <div class="menu-item"><i class="fa-solid fa-cog"></i></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('jobViewsChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                datasets: [{
+                    label: 'Job Views',
+                    data: [50, 100, 250, 200, 180, 150, 90],
+                    borderColor: '#ffffff',
+                    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+                    fill: true,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,  // Ensures proper resizing
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: 'white'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+
+    <script th:src="@{/js/dashscript.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

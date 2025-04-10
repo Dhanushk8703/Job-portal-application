@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        
+        {
+            "type": "java",
+            "name": "Spring Boot-JobPortalRestApiApplication<JobPortalRestApi>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.jobportalrestapi.app.JobPortalRestApiApplication",
+            "projectName": "JobPortalRestApi",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-JobPortalSpringMvcApplication<JobPortalSpringMVC>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.jobportalspringmvc.app.JobPortalSpringMvcApplication",
+            "projectName": "JobPortalSpringMVC",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

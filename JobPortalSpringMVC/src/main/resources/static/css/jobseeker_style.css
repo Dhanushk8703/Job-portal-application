@@ -1,0 +1,369 @@
+ /* Custom styles */
+ body {
+     background-color: #f8f9fa;
+     /* Light gray background */
+     margin: 0;
+     padding: 0;
+     font-family: "Inter";
+
+ }
+
+ /* Navbar customizations */
+ .navbar {
+     background-color: #fff;
+ }
+
+ .navbar-brand {
+     font-weight: 700;
+     font-size: 1.5rem;
+ }
+
+ .navbar-nav .nav-link {
+     margin-right: 1rem;
+     font-weight: 500;
+ }
+
+ /* Hero section */
+ .hero-section {
+     text-align: center;
+     padding: 150px 0;
+     background-color: #f4f8f9;
+     background-image: linear-gradient(0deg, #f4f8f9 14%, #faff1b 54%, #ffffff 84%);
+
+ }
+
+ .hero-section h1 {
+     font-size: 3rem;
+     font-weight: 700;
+     margin-bottom: 15px;
+ }
+
+ .hero-section p {
+     font-size: 1.25rem;
+     color: #6c757d;
+     margin-bottom: 30px;
+ }
+
+ .search-bar-container {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+ }
+
+ .search-bar {
+     display: flex;
+     align-items: center;
+     background-color: #fff;
+     border-radius: 999px;
+     /* large radius for a pill shape */
+     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+     padding: 0.5rem 1rem;
+     max-width: 900px;
+     width: 100%;
+ }
+
+ .search-bar input,
+ .search-bar select {
+     border: none;
+     outline: none;
+     background: transparent;
+     font-size: 1rem;
+     color: #444;
+     flex: 1;
+     min-width: 0;
+     /* helps prevent overflow in flex layout */
+     margin: 0 0.75rem;
+ }
+
+ .search-bar input::placeholder {
+     color: #888;
+ }
+
+ .search-icon {
+     color: #888;
+     font-size: 1.2rem;
+     margin-right: 0.75rem;
+ }
+
+ .divider {
+     width: 1px;
+     height: 2rem;
+     background-color: #ddd;
+ }
+
+ .search-bar button {
+     border: none;
+     outline: none;
+     background-color: #2974f1;
+     /* Adjust color to match your design */
+     color: #fff;
+     font-weight: 500;
+     border-radius: 999px;
+     padding: 0.6rem 1.5rem;
+     cursor: pointer;
+     transition: background-color 0.2s ease-in-out;
+ }
+
+ .search-bar button:hover {
+     background-color: #1863d6;
+ }
+
+ /* Adjust spacing on smaller screens */
+ @media (max-width: 767.98px) {
+     .navbar-brand {
+         margin-left: 0;
+     }
+ }
+
+ .card-custom {
+     border: none;
+     border-radius: 0.75rem;
+     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+     position: relative;
+     overflow: hidden;
+     padding: 1.5rem;
+ }
+
+ .card-custom .background-text {
+     position: absolute;
+     top: 50%;
+     left: 80%;
+     transform: translate(-50%, -50%);
+     font-size: 3rem;
+     font-weight: 700;
+     color: #000;
+     opacity: 0.05;
+     white-space: nowrap;
+     pointer-events: none;
+     z-index: 100;
+ }
+
+ .explore-jobs-btn {
+     display: inline-flex;
+     align-items: center;
+     background-color: #000;
+     color: #fff;
+     border: none;
+     border-radius: 50px;
+     padding: 10px 20px;
+     font-weight: 600;
+     font-size: 1rem;
+     text-decoration: none;
+     transition: all 0.3s ease-in-out;
+ }
+
+ .explore-jobs-btn:hover {
+     background-color: #222;
+     color: #fff;
+ }
+
+ .explore-jobs-btn .arrow {
+     margin-left: 8px;
+     transition: transform 0.3s ease-in-out;
+ }
+
+ .explore-jobs-btn:hover .arrow {
+     transform: translateX(5px);
+ }
+
+ .card-custom img {
+     position: absolute;
+     bottom: 1rem;
+     right: 1rem;
+     width: 150px;
+     height: auto;
+ }
+
+ .peach-container {
+     background-color: #fff8f2;
+     /* Soft peach */
+     border-radius: 1.5rem;
+     position: relative;
+     /* Needed for absolutely positioned child */
+     padding: 3rem;
+     min-height: 400px;
+     /* Adjust as needed */
+ }
+
+ /* Basic text styling */
+ .peach-container h2 {
+     font-weight: 700;
+     font-size: 1.75rem;
+     margin-bottom: 1rem;
+ }
+
+ .peach-container p {
+     color: #6c757d;
+     margin-bottom: 2rem;
+ }
+
+ .illustration {
+     max-width: 100%;
+     height: auto;
+     display: block;
+ }
+
+ /* The floating card (right side) */
+ .floating-card {
+     width: 100%;
+     /* Adjust as needed */
+     max-width: 600px;
+     /* Optional max width */
+     background-color: #fff;
+     border-radius: 1rem;
+     box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+     padding: 1.5rem;
+ }
+
+ /* Role box styling inside the carousel */
+ .role-box {
+     border: 1px solid #f0f0f0;
+     border-radius: 0.5rem;
+     padding: 1rem;
+     text-align: center;
+     transition: background-color 0.2s;
+ }
+
+ .role-box:hover {
+     background-color: #fafafa;
+ }
+
+ .role-box h6 {
+     font-weight: 600;
+     margin-bottom: 0.25rem;
+     font-size: 1rem;
+ }
+
+ .role-box p {
+     margin-bottom: 0;
+     color: #6c757d;
+     font-size: 0.875rem;
+ }
+
+ /* Carousel controls (arrows) */
+ .carousel-control-prev,
+ .carousel-control-next {
+     width: 2.5rem;
+     height: 2.5rem;
+     background: #fff;
+     border-radius: 50%;
+     top: 50%;
+     transform: translateY(-50%);
+     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+ }
+
+ .carousel-control-prev-icon,
+ .carousel-control-next-icon {
+     filter: invert(0) brightness(0) sepia(1) saturate(10) hue-rotate(0deg);
+     width: 0.8rem;
+     height: 0.8rem;
+ }
+
+ /* Dots (carousel indicators) */
+ .carousel-indicators [data-bs-target] {
+     width: 6px;
+     height: 6px;
+     border-radius: 50%;
+     background-color: #000;
+ }
+
+ /* Positioning the floating card to hang on the right side */
+ .floating-card-position {
+     position: absolute;
+     top: 50%;
+     right: 2rem;
+     /* Adjust how far from the right edge */
+     transform: translateY(-50%);
+ }
+
+ /* Responsive adjustments */
+ @media (max-width: 991px) {
+     .floating-card-position {
+         position: static;
+         transform: none;
+         width: 100% !important;
+         margin-top: 2rem;
+     }
+
+     .floating-card {
+         width: 100% !important;
+     }
+ }
+ 
+ /* Scrollable container */
+ .scroll-container {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 20px;
+    scroll-behavior: smooth;
+}
+
+/* Hide default scrollbar */
+.scroll-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Job Cards */
+.job-card {
+    display: inline-block;
+    width: 400px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-right: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    text-align: center;
+}
+
+.job-card:hover {
+    transform: translateY(-5px);
+}
+
+.company-logo {
+    max-width: 120px;
+    margin-bottom: 15px;
+}
+
+.job-title {
+    font-weight: bold;
+    font-size: 18px;
+    color: #212529;
+}
+
+.job-description {
+    font-size: 14px;
+    color: #5a5a5a;
+}
+
+.view-jobs {
+    font-weight: bold;
+    color: #007d4e;
+    text-decoration: none;
+}
+
+.view-jobs:hover {
+    text-decoration: underline;
+}
+
+/* Bottom Scroll Indicator */
+.scroll-indicator {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 6px;
+    background: #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.scroll-progress {
+    height: 100%;
+    width: 0;
+    background: #007d4e;
+    border-radius: 10px;
+    transition: width 0.2s ease-in-out;
+}
+
