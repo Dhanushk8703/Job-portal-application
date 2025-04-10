@@ -211,6 +211,10 @@
         <div class="menu-item"><i class="fa-solid fa-cog"></i></div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script th:inline="javascript">
+        const token = /*[[${session.token}]]*/ '';
+        sessionStorage.setItem("jwtToken", token);
+    </script>
     <script>
         const ctx = document.getElementById('jobViewsChart').getContext('2d');
         new Chart(ctx, {

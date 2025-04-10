@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -7,88 +7,17 @@
     <title>Job Search Page</title>
 
     <!-- Bootstrap 5 CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css}">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
+    <link rel="preconnect" th:href="@{https://fonts.gstatic.com}" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        th:href="@{https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap}"
         rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/jobseeker_style.css}">
-    <style>
-        .footer {
-            background-color: #f8f9fa;
-            padding: 40px 0;
-            font-size: 14px;
-            color: #333;
-        }
-
-        .footer-container {
-            width: 80%;
-            margin: auto;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .footer-sections {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-
-        .footer-column {
-            width: 22%;
-        }
-
-        .footer-column h3 {
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-
-        .footer-column ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-column ul li {
-            margin-bottom: 8px;
-        }
-
-        .footer-column ul li a {
-            text-decoration: none;
-            color: #555;
-        }
-
-        .footer-column form input {
-            width: 80%;
-            padding: 8px;
-            margin-top: 10px;
-        }
-
-        .footer-column form button {
-            padding: 8px 12px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 12px;
-        }
-
-        .social-links {
-            margin-top: 10px;
-        }
-
-        .social-links a img {
-            width: 20px;
-            margin-right: 10px;
-        }
-    </style>
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
 </head>
 
 <body>
@@ -96,9 +25,8 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
         <div class="container">
-            <!-- Logo / Brand -->
-            <a class="navbar-brand" href="#">
-                <!-- You can replace this text with an actual logo image if desired -->
+            <!-- Logo-->
+            <a class="navbar-brand" th:href="@{/}">
                 <h4>HireoScope</h4>
             </a>
 
@@ -112,12 +40,17 @@
             <div class="collapse navbar-collapse mx-auto" id="navbarNav">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" th:href="@{/jobsListing}">Jobs</a>
+                        <a class="nav-link active" aria-current="page" th:href="@{/jobListing}">Jobs</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Companies</a>
+                        <a class="nav-link" th:href="@{/companyList}">Companies</a>
                     </li>
                 </ul>
+                <!-- Right side buttons/links -->
+                <div class="d-flex">
+                    <a th:href="@{/login}" class="btn btn-outline-primary mx-3">Login</a>
+                    <a th:href="@{/role}" class="btn btn-primary">Register</a>
+                </div>
             </div>
         </div>
     </nav>
@@ -126,9 +59,9 @@
     <div class="hero-section">
         <div class="container">
             <div class="row">
-                <div class="col-lg-6">
-                    <h1>Find <span class="text-white">Jobs</span> which suits You!!</h1>
-                    <p>300k + jobs for you to explore</p>
+                <div class="col-lg-8">
+                    <h1>Find <span style="color: #376FFF;">Jobs</span> which suits You!!</h1>
+                    <p>300k+ jobs for you to explore</p>
                 </div>
             </div>
 
@@ -140,7 +73,7 @@
                     <i class="fa-brands fa-searchengin"></i>
 
                     <!-- First input: Skills/Designation/Companies -->
-                    <input type="text" placeholder="Enter skills / designations / companies" />
+                    <input type="text" placeholder="Enter skills / companies" />
 
                     <!-- Divider -->
                     <div class="divider"></div>
@@ -168,82 +101,264 @@
                 </div>
             </div>
         </div>
-    </div>
+        <div class="container pt-5">
 
-    <div class="container my-5">
-        <h1 class="mb-5">Popular Searches on Hireoscope</h1>
-        <div class="row justify-content-center">
-            <div class="col-md-6 col-lg-5 mb-4">
-                <div class="card card-custom">
-                    <div class="background-text">Jobs for Freshers</div>
-                    <p class="text-uppercase text-muted fw-semibold mb-1" style="font-size: 0.75rem;">
-                        Trending at #1
-                    </p>
-                    <h3 class="fw-bold mb-2">Jobs for Freshers</h3>
-                    <div class="container mt-5">
-                        <a href="#" class="explore-jobs-btn">
-                            Explore Jobs <span class="arrow"><i class="fa-solid fa-arrow-right"></i></span>
-                        </a>
+            <h3>Trusted By 1000+ <span style="color: #376FFF;">Companies </span>for hiring</h3>
+
+        </div>
+        <div class="company-slider demo-1">
+            <div class="slider-container">
+                <div class="slider-content-wrapper">
+                    <div class="slider-to-clone">
+                        <div class="company-logos-container d-flex">
+                            <!-- Skill Cards -->
+                            <div class="company-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#376FFF">
+                                <img th:src="@{/images/companyLogos/BHARTIARTL.NS_BIG.png}" width="70px" class="mx-auto" alt="">
+                            </div>
+
+                            <div class="company-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#e74c3c">
+                                <img th:src="@{/images/companyLogos/HCLTECH.NS_BIG.png}" width="70px" class="mx-auto" alt="">
+                            </div>
+
+                            <div class="company-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#588157">
+                                <img th:src="@{/images/companyLogos/HDB_BIG.png}" width="70px" class="mx-auto" alt="">
+                            </div>
+                            <div class="company-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#e74c3c">
+                                <img th:src="@{/images/companyLogos/TCS.NS.png}" width="70px" class="mx-auto" alt="">
+                            </div>
+
+                            <div class="company-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#588157">
+                                <img th:src="@{/images/companyLogos/INFY_BIG.png}" width="70px" class="mx-auto" alt="">
+                            </div>
+                            <div class="company-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#588157">
+                                <img th:src="@{/images/companyLogos/M&M.NS_BIG.png}" width="70px" class="mx-auto" alt="">
+                            </div>
+                            <div class="company-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#588157">
+                                <img th:src="@{/images/companyLogos/ZOMATO.NS_BIG.png}" width="70px" class="mx-auto" alt="">
+                            </div>
+                            <div class="company-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#588157">
+                                <img th:src="@{/images/companyLogos/WIT.png}" width="70px" class="mx-auto" alt="">
+                            </div>
+                            <div class="company-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#588157">
+                                <img th:src="@{/images/companyLogos/SONY_BIG.png}" width="70px" class="mx-auto" alt="">
+                            </div>
+                            <div class="company-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#588157">
+                                <img th:src="@{/images/companyLogos/AMZN_BIG.png}" width="70px" class="mx-auto" alt="">
+                            </div>
+                            <div class="company-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#588157">
+                                <img th:src="@{/images/companyLogos/GOOG_BIG.png}" width="70px" class="mx-auto" alt="">
+                            </div>
+                            <div class="company-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#588157">
+                                <img th:src="@{/images/companyLogos/EA_BIG.png}" width="70px" class="mx-auto" alt="">
+                            </div>
+                            <div class="company-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#588157">
+                                <img th:src="@{/images/companyLogos/META_BIG.png}" width="70px" class="mx-auto" alt="">
+                            </div>
+                            <div class="company-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#588157">
+                                <img th:src="@{/images/companyLogos/V.png}" width="70px" class="mx-auto" alt="">
+                            </div>
+                            <div class="company-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#588157">
+                                <img th:src="@{/images/companyLogos/INTC.png}" width="70px" class="mx-auto" alt="">
+                            </div>
+                        </div>
                     </div>
-                    <img th:src="@{/images/fresher.jpg}" alt="Jobs for Freshers" />
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-5 mb-4">
-                <div class="card card-custom">
-                    <div class="background-text">Jobs for Freshers</div>
-                    <p class="text-uppercase text-muted fw-semibold mb-1" style="font-size: 0.75rem;">
-                        Trending at #1
-                    </p>
-                    <h3 class="fw-bold mb-2">Jobs for Freshers</h3>
-                    <div class="container mt-5">
-                        <a href="#" class="explore-jobs-btn">
-                            Explore Jobs <span class="arrow"><i class="fa-solid fa-arrow-right"></i></span>
-                        </a>
-                    </div>
-                    <img th:src="@{/images/fresher.jpg}" alt="Woman giving thumbs up" />
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-5 mb-4">
-                <div class="card card-custom">
-                    <div class="background-text">Jobs for Freshers</div>
-                    <p class="text-uppercase text-muted fw-semibold mb-1" style="font-size: 0.75rem;">
-                        Trending at #1
-                    </p>
-                    <h3 class="fw-bold mb-2">Jobs for Freshers</h3>
-                    <div class="container mt-5">
-                        <a href="#" class="explore-jobs-btn">
-                            Explore Jobs <span class="arrow"><i class="fa-solid fa-arrow-right"></i></span>
-                        </a>
-                    </div>
-                    <img th:src="@{/images/fresher.jpg}" alt="Woman giving thumbs up" />
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-5 mb-4">
-                <div class="card card-custom">
-                    <div class="background-text">Jobs for Freshers</div>
-                    <p class="text-uppercase text-muted fw-semibold mb-1" style="font-size: 0.75rem;">
-                        Trending at #1
-                    </p>
-                    <h3 class="fw-bold mb-2">Jobs for Freshers</h3>
-                    <div class="container mt-5">
-                        <a href="#" class="explore-jobs-btn">
-                            Explore Jobs <span class="arrow"><i class="fa-solid fa-arrow-right"></i></span>
-                        </a>
-                    </div>
-                    <img th:src="@{/images/fresher.jpg}" alt="Woman giving thumbs up" />
                 </div>
             </div>
         </div>
     </div>
+    <div class="container my-5">
+        <h1 class="mb-5">Popular Searches on <span style="color: #376FFF;">Hireoscope</span></h1>
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5 mb-4">
+                <div class="card card-custom" data-color="#376FFF">
+                    <div class="background-text">Jobs for Freshers</div>
+                    <p class="text-uppercase text-muted fw-semibold mb-1" style="font-size: 0.75rem;">
+                        Trending at #1
+                    </p>
+                    <h3 class="fw-bold mb-2 card-title">Jobs for Freshers</h3>
+                    <div class="container mt-5">
+                        <a href="#" class="explore-jobs-btn">
+                            Explore Jobs <span class="arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                        </a>
+                    </div>
+                    <img th:src="@{/images/card images/fresher.jpg}" alt="Woman giving thumbs up" />
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-5 mb-4">
+                <div class="card card-custom" data-color="#e74c3c">
+                    <div class="background-text ">Jobs on Tech</div>
+                    <p class="text-uppercase text-muted fw-semibold mb-1" style="font-size: 0.75rem;">
+                        Trending at #2
+                    </p>
+                    <h3 class="fw-bold mb-2 card-title">Jobs on Tech</h3>
+                    <div class="container mt-5">
+                        <a href="#" class="explore-jobs-btn">
+                            Explore Jobs <span class="arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                        </a>
+                    </div>
+                    <img th:src="@{/images/card images/it-jobs1.png}" alt="Woman giving thumbs up" />
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-5 mb-4">
+                <div class="card card-custom" data-color="#588157">
+                    <div class="background-text">Jobs on Design</div>
+                    <p class="text-uppercase text-muted fw-semibold mb-1" style="font-size: 0.75rem;">
+                        Trending at #3
+                    </p>
+                    <h3 class="fw-bold mb-2 card-title">Jobs on Design</h3>
+                    <div class="container mt-5">
+                        <a href="#" class="explore-jobs-btn">
+                            Explore Jobs <span class="arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                        </a>
+                    </div>
+                    <img th:src="@{/images/card images/design-jobs1.png}" alt="Woman giving thumbs up" />
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-5 mb-4">
+                <div class="card card-custom" data-color="#8338ec">
+                    <div class="background-text">Work from Home</div>
+                    <p class="text-uppercase text-muted fw-semibold mb-1" style="font-size: 0.75rem;">
+                        Trending at #4
+                    </p>
+                    <h3 class="fw-bold mb-2 card-title">Work from Home Jobs</h3>
+                    <div class="container mt-5">
+                        <a href="#" class="explore-jobs-btn">
+                            Explore Jobs <span class="arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                        </a>
+                    </div>
+                    <img th:src="@{/images/card images/work-from-home2.png}" alt="Woman giving thumbs up" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap JS (including Popper) -->
+
+    <section class="social-section py-5">
+        <div class="container">
+            <h1 class="mb-5">Featured <span style="color: #376FFF;"> Companies</span></h1>
+            <div class="row g-4">
+                <!-- Card 4 -->
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="social-card p-3 d-flex align-items-start gap-3 shadow-sm rounded bg-white h-100">
+                        <img th:src="@{/images/companyLogoSmall/MNC/GOOG.png}" alt="YouTube" class="social-icon" />
+                        <div>
+                            <h5 class="fw-semibold mb-1">Google</h5>
+                            <a href="#" class="learn-more-link d-inline">Learn more <span class="arrow-button">
+                                    <i class="fa-solid fa-arrow-up"></i>
+                                </span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="social-card p-3 d-flex align-items-start gap-3 shadow-sm rounded bg-white h-100">
+                        <img th:src="@{/images/companyLogoSmall/MNC/INTC.png}" alt="YouTube" class="social-icon" />
+                        <div>
+                            <h5 class="fw-semibold mb-1">Intel</h5>
+                            <a href="#" class="learn-more-link d-inline">Learn more <span class="arrow-button">
+                                    <i class="fa-solid fa-arrow-up"></i>
+                                </span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="social-card p-3 d-flex align-items-start gap-3 shadow-sm rounded bg-white h-100">
+                        <img th:src="@{/images/companyLogoSmall/MNC/META.png}" alt="YouTube" class="social-icon" />
+                        <div>
+                            <h5 class="fw-semibold mb-1">Meta</h5>
+                            <a href="#" class="learn-more-link d-inline">Learn more <span class="arrow-button">
+                                    <i class="fa-solid fa-arrow-up"></i>
+                                </span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="social-card p-3 d-flex align-items-start gap-3 shadow-sm rounded bg-white h-100">
+                        <img th:src="@{/images/companyLogoSmall/Software/CRWD.png}" alt="YouTube" class="social-icon" />
+                        <div>
+                            <h5 class="fw-semibold mb-1">Crowd Strike</h5>
+                            <a href="#" class="learn-more-link d-inline">Learn more <span class="arrow-button">
+                                    <i class="fa-solid fa-arrow-up"></i>
+                                </span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="social-card p-3 d-flex align-items-start gap-3 shadow-sm rounded bg-white h-100">
+                        <img th:src="@{/images/companyLogoSmall/Gaming/EA.png}" alt="YouTube" class="social-icon" />
+                        <div>
+                            <h5 class="fw-semibold mb-1">Electronic Arts</h5>
+                            <a href="#" class="learn-more-link d-inline">Learn more <span class="arrow-button">
+                                    <i class="fa-solid fa-arrow-up"></i>
+                                </span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="social-card p-3 d-flex align-items-start gap-3 shadow-sm rounded bg-white h-100">
+                        <img th:src="@{/images/companyLogoSmall/Software/ORCL.png}" alt="YouTube" class="social-icon" />
+                        <div>
+                            <h5 class="fw-semibold mb-1">Oracle</h5>
+                            <a href="#" class="learn-more-link d-inline">Learn more <span class="arrow-button">
+                                    <i class="fa-solid fa-arrow-up"></i>
+                                </span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="social-card p-3 d-flex align-items-start gap-3 shadow-sm rounded bg-white h-100">
+                        <img th:src="@{/images/companyLogoSmall/FinancialService/HDB.png}" alt="YouTube" class="social-icon" />
+                        <div>
+                            <h5 class="fw-semibold mb-1">HDFC Bank</h5>
+                            <a href="#" class="learn-more-link d-inline">Learn more <span class="arrow-button">
+                                    <i class="fa-solid fa-arrow-up"></i>
+                                </span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="social-card p-3 d-flex align-items-start gap-3 shadow-sm rounded bg-white h-100">
+                        <img th:src="@{/images/companyLogoSmall/MNC/NVDA.png}" alt="YouTube" class="social-icon" />
+                        <div>
+                            <h5 class="fw-semibold mb-1">Nvidia</h5>
+                            <a href="#" class="learn-more-link d-inline">Learn more <span class="arrow-button">
+                                    <i class="fa-solid fa-arrow-up"></i>
+                                </span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container text-center mt-5">
+                <a href="#" class="explore-jobs-btn">
+                    View All Companies<span class="arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                </a>
+            </div>
+        </div>
+    </section>
 
     <section>
         <div class="container my-5">
+            <h1 class="mb-5">Discover jobs across popular<span style="color: #376FFF;"> Cities</span></h1>
             <div class="peach-container">
                 <!-- Left side text and illustration -->
-                <h2>Discover jobs across popular cities</h2>
+                <h2>Kickstart your career in leading cities</h2>
                 <p>Select a location and we'll show you relevant jobs for it.</p>
-                <img th:src="@{/images/search-job-by-city.png}" alt="Illustration" class="illustration mb-3"
-                    style="max-width: 400px;" />
+                <img th:src="@{/images/card images/search-job-by-city.png}" alt="Illustration" class="illustration mb-3"
+                    style="width: 400px; border-radius: 10px;" />
 
                 <!-- Right side carousel: absolutely positioned to hang over the right edge -->
                 <div class="floating-card-position">
@@ -265,25 +380,25 @@
                                         <!-- 1 -->
                                         <div class="col">
                                             <div class="role-box h-100 d-flex flex-column justify-content-center">
-                                                <img th:src="@{/images/chennai.png}" alt="">
+                                                <img th:src="@{/images/cities/chennai.png}" alt="">
                                             </div>
                                         </div>
                                         <!-- 2 -->
                                         <div class="col">
                                             <div class="role-box h-100 d-flex flex-column justify-content-center">
-                                                <img th:src="@{/images/chennai.png}" alt="">
+                                                <img th:src="@{/images/cities/chennai.png}" alt="">
                                             </div>
                                         </div>
                                         <!-- 3 -->
                                         <div class="col">
                                             <div class="role-box h-100 d-flex flex-column justify-content-center">
-                                                <img th:src="@{/images/chennai.png}" alt="">
+                                                <img th:src="@{/images/cities/chennai.png}" alt="">
                                             </div>
                                         </div>
                                         <!-- 4 -->
                                         <div class="col">
                                             <div class="role-box h-100 d-flex flex-column justify-content-center">
-                                                <img th:src="@{/images/chennai.png}" alt="">
+                                                <img th:src="@{/images/cities/chennai.png}" alt="">
                                             </div>
                                         </div>
                                     </div>
@@ -295,25 +410,25 @@
                                         <!-- 1 -->
                                         <div class="col">
                                             <div class="role-box h-100 d-flex flex-column justify-content-center">
-                                                <img th:src="@{/images/chennai.png}" alt="">
+                                                <img th:src="@{/images/cities/chennai.png}" alt="">
                                             </div>
                                         </div>
                                         <!-- 2 -->
                                         <div class="col">
                                             <div class="role-box h-100 d-flex flex-column justify-content-center">
-                                                <img th:src="@{/images/chennai.png}" alt="">
+                                                <img th:src="@{/images/cities/chennai.png}" alt="">
                                             </div>
                                         </div>
                                         <!-- 3 -->
                                         <div class="col">
                                             <div class="role-box h-100 d-flex flex-column justify-content-center">
-                                                <img th:src="@{/images/chennai.png}" alt="">
+                                                <img th:src="@{/images/cities/chennai.png}" alt="">
                                             </div>
                                         </div>
                                         <!-- 4 -->
                                         <div class="col">
                                             <div class="role-box h-100 d-flex flex-column justify-content-center">
-                                                <img th:src="@{/images/chennai.png}" alt="">
+                                                <img th:src="@{/images/cities/chennai.png}" alt="">
                                             </div>
                                         </div>
                                     </div>
@@ -336,126 +451,621 @@
                 </div>
             </div>
         </div>
+
     </section>
 
-    <section class="slider p-5">
-        <div class="container footer-container">
-            <h1>Job Openings in Top Companies</h1>
-        </div>
-        <div class="container  mt-5 position-relative">
-            <!-- Left Scroll Button -->
-            <div class="scroll-container d-flex">
-                <!-- Job Cards -->
-                <div class="job-card">
-                    <img th:src="@{/images/paytm.webp}" alt="Paytm Logo" class="company-logo">
-                    <h5 class="job-title">Paytm Service Pvt. Ltd.</h5>
-                    <p class="job-description">Digital payment and e-commerce facilitator.</p>
-                    <a href="#" class="view-jobs">View jobs →</a>
+    <section>
+        <div class="container">
+            <h1 class="mb-5">Recent Openings on<span style="color: #376FFF;"> HireoScope</span></h1>
+            <div class="row">
+                <div
+                    class="card rounded-4 p-3 mt-4 d-flex flex-row align-items-start gap-3 shadow-sm  popular-job-card bg-white col-lg-6 col-md-12 col-sm-12">
+                    <!-- Logo -->
+                    <div class="p-4 rounded-3 d-flex align-items-center justify-content-center job-logo">
+                        <img th:src="@{/images/companyLogoSmall/Gaming/EA.png}" alt="Company Logo">
+                    </div>
+                    <!-- Job Details -->
+                    <div class="flex-grow-1">
+                        <div class="text-uppercase fw-semibold small popular-job-card-company">Electronic Arts</div>
+                        <h5 class="fw-semibold mb-3 mt-1 popular-job-card-title">Game Developer</h5>
+                        <div class="d-flex flex-wrap gap-2 job-badges">
+                            <span
+                                class="badge rounded-pill bg-white border text-dark d-flex align-items-center gap-1  job-badge">
+                                <i class="bi bi-geo-alt-fill"></i> Remote
+                            </span>
+                            <span
+                                class="badge rounded-pill bg-white border text-dark d-flex align-items-center gap-1 job-badge">
+                                <i class="bi bi-bar-chart-fill"></i> Senior
+                            </span>
+                            <span
+                                class="badge rounded-pill bg-white border text-dark d-flex align-items-center gap-1  job-badge">
+                                <i class="bi bi-briefcase-fill"></i> Development
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Arrow -->
+                    <div class="ms-auto arrow-btn-div">
+                        <button class="btn btn-sm btn-light shadow-sm rounded-3  arrow-btn">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <div
+                    class="card rounded-4 p-3 mt-4 d-flex flex-row align-items-start gap-3 shadow-sm  popular-job-card bg-white col-lg-6 col-md-12 col-sm-12">
+                    <!-- Logo -->
+                    <div class="p-4 rounded-3 d-flex align-items-center justify-content-center job-logo">
+                        <img th:src="@{/images/companyLogoSmall/MNC/GOOG.png}" alt="Company Logo">
+                    </div>
+                    <!-- Job Details -->
+                    <div class="flex-grow-1">
+                        <div class="text-uppercase fw-semibold small popular-job-card-company">Google</div>
+                        <h5 class="fw-semibold mb-3 mt-1 popular-job-card-title">Frontend Engineer</h5>
+                        <div class="d-flex flex-wrap gap-2 job-badges">
+                            <span
+                                class="badge rounded-pill bg-white border text-dark d-flex align-items-center gap-1  job-badge">
+                                <i class="bi bi-geo-alt-fill"></i> Austin, TX
+                            </span>
+                            <span
+                                class="badge rounded-pill bg-white border text-dark d-flex align-items-center gap-1 job-badge">
+                                <i class="bi bi-bar-chart-fill"></i> Junior
+                            </span>
+                            <span
+                                class="badge rounded-pill bg-white border text-dark d-flex align-items-center gap-1  job-badge">
+                                <i class="bi bi-briefcase-fill"></i> Development
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Arrow -->
+                    <div class="ms-auto arrow-btn-div">
+                        <button class="btn btn-sm btn-light shadow-sm rounded-3  arrow-btn">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="job-card">
-                    <img th:src="@{/images/paytm.webp}" alt="Paytm Logo" class="company-logo">
-                    <h5 class="job-title">Paytm Service Pvt. Ltd.</h5>
-                    <p class="job-description">Digital payment and e-commerce facilitator.</p>
-                    <a href="#" class="view-jobs">View jobs →</a>
+                <div
+                    class="card rounded-4 p-3 mt-4 d-flex flex-row align-items-start gap-3 shadow-sm  popular-job-card bg-white col-lg-6 col-md-12 col-sm-12">
+                    <!-- Logo -->
+                    <div class="p-4 rounded-3 d-flex align-items-center justify-content-center job-logo">
+                        <img th:src="@{/images/companyLogoSmall/MNC/ADBE.png}" alt="Company Logo">
+                    </div>
+                    <!-- Job Details -->
+                    <div class="flex-grow-1">
+                        <div class="text-uppercase fw-semibold small popular-job-card-company">Adobe</div>
+                        <h5 class="fw-semibold mb-3 mt-1 popular-job-card-title">Creative Strategist</h5>
+                        <div class="d-flex flex-wrap gap-2 job-badges">
+                            <span
+                                class="badge rounded-pill bg-white border text-dark d-flex align-items-center gap-1  job-badge">
+                                <i class="bi bi-geo-alt-fill"></i> London, UK
+                            </span>
+                            <span
+                                class="badge rounded-pill bg-white border text-dark d-flex align-items-center gap-1 job-badge">
+                                <i class="bi bi-bar-chart-fill"></i> Senior
+                            </span>
+                            <span
+                                class="badge rounded-pill bg-white border text-dark d-flex align-items-center gap-1  job-badge">
+                                <i class="bi bi-briefcase-fill"></i> Creative
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Arrow -->
+                    <div class="ms-auto arrow-btn-div">
+                        <button class="btn btn-sm btn-light shadow-sm rounded-3  arrow-btn">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="job-card">
-                    <img th:src="@{/images/paytm.webp}" alt="Paytm Logo" class="company-logo">
-                    <h5 class="job-title">Paytm Service Pvt. Ltd.</h5>
-                    <p class="job-description">Digital payment and e-commerce facilitator.</p>
-                    <a href="#" class="view-jobs">View jobs →</a>
-                </div>
-
-                <div class="job-card">
-                    <img th:src="@{/images/paytm.webp}" alt="Paytm Logo" class="company-logo">
-                    <h5 class="job-title">Paytm Service Pvt. Ltd.</h5>
-                    <p class="job-description">Digital payment and e-commerce facilitator.</p>
-                    <a href="#" class="view-jobs">View jobs →</a>
-                </div>
-
-                <div class="job-card">
-                    <img th:src="@{/images/paytm.webp}" alt="Paytm Logo" class="company-logo">
-                    <h5 class="job-title">Paytm Service Pvt. Ltd.</h5>
-                    <p class="job-description">Digital payment and e-commerce facilitator.</p>
-                    <a href="#" class="view-jobs">View jobs →</a>
+                <div
+                    class="card rounded-4 p-3 mt-4 d-flex flex-row align-items-start gap-3 shadow-sm  popular-job-card bg-white col-lg-6 col-md-12 col-sm-12">
+                    <!-- Logo -->
+                    <div class="p-4 rounded-3 d-flex align-items-center justify-content-center job-logo">
+                        <img th:src="@{/images/companyLogoSmall/SWIGGY.NS.png}" alt="Company Logo">
+                    </div>
+                    <!-- Job Details -->
+                    <div class="flex-grow-1">
+                        <div class="text-uppercase fw-semibold small popular-job-card-company">Swiggy</div>
+                        <h5 class="fw-semibold mb-3 mt-1 popular-job-card-title">Marketing Analyst</h5>
+                        <div class="d-flex flex-wrap gap-2 job-badges">
+                            <span
+                                class="badge rounded-pill bg-white border text-dark d-flex align-items-center gap-1  job-badge">
+                                <i class="bi bi-geo-alt-fill"></i> Remote
+                            </span>
+                            <span
+                                class="badge rounded-pill bg-white border text-dark d-flex align-items-center gap-1 job-badge">
+                                <i class="bi bi-bar-chart-fill"></i> Entry-Level
+                            </span>
+                            <span
+                                class="badge rounded-pill bg-white border text-dark d-flex align-items-center gap-1  job-badge">
+                                <i class="bi bi-briefcase-fill"></i> Marketing
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Arrow -->
+                    <div class="ms-auto arrow-btn-div">
+                        <button class="btn btn-sm btn-light shadow-sm rounded-3  arrow-btn">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="container text-center mt-5">
                 <a href="#" class="explore-jobs-btn">
-                    View All <span class="arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                    View All Jobs<span class="arrow"><i class="fa-solid fa-arrow-right"></i></span>
                 </a>
             </div>
         </div>
     </section>
 
-    <footer class="footer">
+    <section class="mt-5">
         <div class="container">
-            <div class="footer-sections">
-                <div class="footer-column">
-                    <h3>Main pages</h3>
-                    <ul>
-                        <li><a th:href="@{/home}">Home</a></li>
-                        <li><a th:href="@{/job-posts}">Job Post V1</a></li>
-                        <li><a th:href="@{/companies}">Companies V1</a></li>
-                        <li><a th:href="@{/about}">About</a></li>
-                        <li><a th:href="@{/blog}">Blog</a></li>
-                        <li><a th:href="@{/contact}">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Utility pages</h3>
-                    <ul>
-                        <li><a th:href="@{/signin}">Sign in</a></li>
-                        <li><a th:href="@{/signup}">Sign up</a></li>
-                        <li><a th:href="@{/forgot-password}">Forgot password</a></li>
-                        <li><a th:href="@{/terms}">Terms & conditions</a></li>
-                        <li><a th:href="@{/coming-soon}">Coming soon</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Template pages</h3>
-                    <ul>
-                        <li><a th:href="@{/style-guide}">Style guide</a></li>
-                        <li><a th:href="@{/404}">404 Not found</a></li>
-                        <li><a th:href="@{/licenses}">Licenses</a></li>
-                        <li><a th:href="@{/changelog}">Changelog</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Subscribe to our newsletter!</h3>
-                    <form th:action="@{/subscribe}" method="post">
-                        <input type="email" name="email" placeholder="Enter your email" required>
-                        <button type="submit">Subscribe</button>
-                    </form>
-                    <div class="social-links">
-                        <a href="#"><img th:src="@{/images/facebook-icon.png}" alt="Facebook"></a>
-                        <a href="#"><img th:src="@{/images/twitter-icon.png}" alt="Twitter"></a>
-                        <a href="#"><img th:src="@{/images/linkedin-icon.png}" alt="LinkedIn"></a>
+            <h1 class="mb-5">Trending Job Roles on<span style="color: #376FFF;"> HireoScope</span></h1>
+        </div>
+        <div class="company-slider demo-1">
+            <div class="slider-container">
+                <div class="slider-content-wrapper">
+                    <div class="slider-to-clone">
+                        <div class="company-logos-container d-flex">
+                            <!-- Skill Cards -->
+                            <div class="skill-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#376FFF">
+                                <div class="icon-wrapper d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-code-slash"></i>
+                                </div>
+                                <span class="me-auto fw-semibold text">JavaScript</span>
+                                <i class="bi bi-chevron-right text-muted arrow"></i>
+                            </div>
+
+                            <div class="skill-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#e74c3c">
+                                <div class="icon-wrapper d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-lightning"></i>
+                                </div>
+                                <span class="me-auto fw-semibold text">ReactJS</span>
+                                <i class="bi bi-chevron-right text-muted arrow"></i>
+                            </div>
+
+                            <div class="skill-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#588157">
+                                <div class="icon-wrapper d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-database"></i>
+                                </div>
+                                <span class="me-auto fw-semibold text">SQL</span>
+                                <i class="bi bi-chevron-right text-muted arrow"></i>
+                            </div>
+
+                            <div class="skill-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#8338ec">
+                                <div class="icon-wrapper d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-cloud"></i>
+                                </div>
+                                <span class="me-auto fw-semibold text">AWS</span>
+                                <i class="bi bi-chevron-right text-muted arrow"></i>
+                            </div>
+
+                            <div class="skill-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#588157">
+                                <div class="icon-wrapper d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-terminal"></i>
+                                </div>
+                                <span class="me-auto fw-semibold text">Python</span>
+                                <i class="bi bi-chevron-right text-muted arrow"></i>
+                            </div>
+
+                            <div class="skill-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#e74c3c">
+                                <div class="icon-wrapper d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-gear"></i>
+                                </div>
+                                <span class="me-auto fw-semibold text">DevOps</span>
+                                <i class="bi bi-chevron-right text-muted arrow"></i>
+                            </div>
+
+                            <div class="skill-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#588157">
+                                <div class="icon-wrapper d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-cpu"></i>
+                                </div>
+                                <span class="me-auto fw-semibold text">Machine Learning</span>
+                                <i class="bi bi-chevron-right text-muted arrow"></i>
+                            </div>
+
+                            <div class="skill-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#e74c3c">
+                                <div class="icon-wrapper d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-braces"></i>
+                                </div>
+                                <span class="me-auto fw-semibold text">Java</span>
+                                <i class="bi bi-chevron-right text-muted arrow"></i>
+                            </div>
+
+                            <div class="skill-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#588157">
+                                <div class="icon-wrapper d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-ui-checks"></i>
+                                </div>
+                                <span class="me-auto fw-semibold text">UI/UX</span>
+                                <i class="bi bi-chevron-right text-muted arrow"></i>
+                            </div>
+
+                            <div class="skill-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#8338ec">
+                                <div class="icon-wrapper d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-shield-lock"></i>
+                                </div>
+                                <span class="me-auto fw-semibold text">Cybersecurity</span>
+                                <i class="bi bi-chevron-right text-muted arrow"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 JobBoardly X | Designed by BRIX Templates - Powered by Webflow</p>
+        </div>
+        <div class="company-slider demo-1">
+            <div class="slider-container">
+                <div class="slider-content-wrapper">
+                    <div class="slider-to-clone">
+                        <div class="company-logos-container d-flex">
+                            <!-- Skill Cards -->
+                            <div class="skill-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#376FFF">
+                                <div class="icon-wrapper d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-code-slash"></i>
+                                </div>
+                                <span class="me-auto fw-semibold text">JavaScript</span>
+                                <i class="bi bi-chevron-right text-muted arrow"></i>
+                            </div>
+
+                            <div class="skill-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#e74c3c">
+                                <div class="icon-wrapper d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-lightning"></i>
+                                </div>
+                                <span class="me-auto fw-semibold text">ReactJS</span>
+                                <i class="bi bi-chevron-right text-muted arrow"></i>
+                            </div>
+
+                            <div class="skill-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#588157">
+                                <div class="icon-wrapper d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-database"></i>
+                                </div>
+                                <span class="me-auto fw-semibold text">SQL</span>
+                                <i class="bi bi-chevron-right text-muted arrow"></i>
+                            </div>
+
+                            <div class="skill-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#8338ec">
+                                <div class="icon-wrapper d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-cloud"></i>
+                                </div>
+                                <span class="me-auto fw-semibold text">AWS</span>
+                                <i class="bi bi-chevron-right text-muted arrow"></i>
+                            </div>
+
+                            <div class="skill-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#588157">
+                                <div class="icon-wrapper d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-terminal"></i>
+                                </div>
+                                <span class="me-auto fw-semibold text">Python</span>
+                                <i class="bi bi-chevron-right text-muted arrow"></i>
+                            </div>
+
+                            <div class="skill-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#e74c3c">
+                                <div class="icon-wrapper d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-gear"></i>
+                                </div>
+                                <span class="me-auto fw-semibold text">DevOps</span>
+                                <i class="bi bi-chevron-right text-muted arrow"></i>
+                            </div>
+
+                            <div class="skill-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#588157">
+                                <div class="icon-wrapper d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-cpu"></i>
+                                </div>
+                                <span class="me-auto fw-semibold text">Machine Learning</span>
+                                <i class="bi bi-chevron-right text-muted arrow"></i>
+                            </div>
+
+                            <div class="skill-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#e74c3c">
+                                <div class="icon-wrapper d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-braces"></i>
+                                </div>
+                                <span class="me-auto fw-semibold text">Java</span>
+                                <i class="bi bi-chevron-right text-muted arrow"></i>
+                            </div>
+
+                            <div class="skill-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#588157">
+                                <div class="icon-wrapper d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-ui-checks"></i>
+                                </div>
+                                <span class="me-auto fw-semibold text">UI/UX</span>
+                                <i class="bi bi-chevron-right text-muted arrow"></i>
+                            </div>
+
+                            <div class="skill-card d-flex align-items-center px-3 py-2 me-3 bg-white shadow-sm border"
+                                data-color="#8338ec">
+                                <div class="icon-wrapper d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-shield-lock"></i>
+                                </div>
+                                <span class="me-auto fw-semibold text">Cybersecurity</span>
+                                <i class="bi bi-chevron-right text-muted arrow"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </footer>
+        <div class="container text-center mt-5">
+            <a href="#" class="explore-jobs-btn">
+                View All Jobs<span class="arrow"><i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+        </div>
+    </section>
 
+    <section class="mt-5">
+        <div class="container my-4">
+            <h1>Featured Companies Actively <span style="color: #376FFF;">Hiring</span></h1>
+            <div class="carousel-wrapper">
+                <!-- Prev Button -->
+                <button class="carousel-control-prev" type="button" id="prevBtn">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <!-- Scrollable Role Pills -->
+                <div class="scroll-container" id="scrollContainer">
+                    <div class="scrollable-job-card">
+                        <div class="scrollable-job-card-title">
+                            <h5>MNCs <span><i class="bi bi-chevron-right text-muted arrow"></i></span></h5>
+                        </div>
+                        <div class="scrollable-job-card-subtext">2.1K+ are actively hiring</div>
+                        <div class="logo-row">
+                            <img th:src="@{/images/companyLogoSmall/MNC/ADBE.png}" alt="Adobe" />
+                            <img th:src="@{/images/companyLogoSmall/MNC/AMD.png}" alt="Zynga" />
+                            <img th:src="@{/images/companyLogoSmall/MNC/GOOG.png}" alt="Getronics" />
+                            <img th:src="@{/images/companyLogoSmall/MNC/INTC.png}" alt="o2h" />
+                        </div>
+                    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+                    <div class="scrollable-job-card">
+                        <div class="scrollable-job-card-title">
+                            <h5>Gaming <span><i class="bi bi-chevron-right text-muted arrow"></i></span></h5>
+                        </div>
+                        <div class="scrollable-job-card-subtext">2.1K+ are actively hiring</div>
+                        <div class="logo-row">
+                            <img th:src="@{/images/companyLogoSmall/Gaming/ATVI.png}" alt="SAS" />
+                            <img th:src="@{/images/companyLogoSmall/Gaming/EA.png}" alt="Zynga" />
+                            <img th:src="@{/images/companyLogoSmall/Gaming/SONY.png}" alt="Getronics" />
+                            <img th:src="@{/images/companyLogoSmall/Gaming/TCEHY.png}" alt="o2h" />
+                        </div>
+                    </div>
+
+                    <div class="scrollable-job-card">
+                        <div class="scrollable-job-card-title">
+                            <h5>Software <span><i class="bi bi-chevron-right text-muted arrow"></i></span></h5>
+                        </div>
+                        <div class="scrollable-job-card-subtext">2.1K+ are actively hiring</div>
+                        <div class="logo-row">
+                            <img th:src="@{/images/companyLogoSmall/Software/AAPL.png}" alt="SAS" />
+                            <img th:src="@{/images/companyLogoSmall/Software/CRWD.png}" alt="Zynga" />
+                            <img th:src="@{/images/companyLogoSmall/Software/IBM.png}" alt="Getronics" />
+                            <img th:src="@{/images/companyLogoSmall/Software/ORCL.png}" alt="o2h" />
+                        </div>
+                    </div>
+
+                    <div class="scrollable-job-card">
+                        <div class="scrollable-job-card-title">
+                            <h5>Financial Services <span><i class="bi bi-chevron-right text-muted arrow"></i></span></h5>
+                        </div>
+                        <div class="scrollable-job-card-subtext">2.1K+ are actively hiring</div>
+                        <div class="logo-row">
+                            <img th:src="@{/images/companyLogoSmall/FinancialService/HDB.png}" alt="SAS" />
+                            <img th:src="@{/images/companyLogoSmall/FinancialService/IBN.png}" alt="Zynga" />
+                            <img th:src="@{/images/companyLogoSmall/FinancialService/MA.png}" alt="Getronics" />
+                            <img th:src="@{/images/companyLogoSmall/FinancialService/V.png}" alt="o2h" />
+                        </div>
+                    </div>
+
+                    <div class="scrollable-job-card">
+                        <div class="scrollable-job-card-title">
+                            <h5>Internet <span><i class="bi bi-chevron-right text-muted arrow"></i></span></h5>
+                        </div>
+                        <div class="scrollable-job-card-subtext">2.1K+ are actively hiring</div>
+                        <div class="logo-row">
+                            <img th:src="@{/images/companyLogoSmall/MNC/META.png}" alt="Adobe" />
+                            <img th:src="@{/images/companyLogoSmall/Internet/FB.png}" alt="Zynga" />
+                            <img th:src="@{/images/companyLogoSmall/Internet/NFLX.png}" alt="Getronics" />
+                            <img th:src="@{/images/companyLogoSmall/Internet/UBER.png}" alt="o2h" />
+                        </div>
+                    </div>
+
+                    <div class="scrollable-job-card">
+                        <div class="scrollable-job-card-title">
+                            <h5>Parcel Services <span><i class="bi bi-chevron-right text-muted arrow"></i></span></h5>
+                        </div>
+                        <div class="scrollable-job-card-subtext">2.1K+ are actively hiring</div>
+                        <div class="logo-row">
+                            <img th:src="@{/images/companyLogoSmall/ParcelServices/BLUEDART.NS.png}" alt="SAS" />
+                            <img th:src="@{/images/companyLogoSmall/ParcelServices/DELHIVERY.NS.png}" alt="Zynga" />
+                            <img th:src="@{/images/companyLogoSmall/ParcelServices/DHL.DE.png}" alt="Getronics" />
+                            <img th:src="@{/images/companyLogoSmall/ParcelServices/FDX.png}" alt="o2h" />
+                        </div>
+                    </div>
+
+                    <div class="scrollable-job-card">
+                        <div class="scrollable-job-card-title">
+                            <h5>E-commerce <span><i class="bi bi-chevron-right text-muted arrow"></i></span></h5>
+                        </div>
+                        <div class="scrollable-job-card-subtext">2.1K+ are actively hiring</div>
+                        <div class="logo-row">
+                            <img th:src="@{/images/companyLogoSmall/Ecommerce/AMZN.png}" alt="SAS" />
+                            <img th:src="@{/images/companyLogoSmall/Ecommerce/BABA.png}" alt="Zynga" />
+                            <img th:src="@{/images/companyLogoSmall/Ecommerce/EBAY.png}" alt="Getronics" />
+                            <img th:src="@{/images/companyLogoSmall/Ecommerce/SHOP.png}" alt="o2h" />
+                        </div>
+                    </div>
+                </div>
+                <!-- Next Button -->
+                <button class="carousel-control-next" type="button" id="nextBtn">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+        <div class="container text-center mt-5">
+            <a href="#" class="explore-jobs-btn">
+                View All Companies<span class="arrow"><i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+        </div>
+    </section>
+    <section class="mt-5">
+        <footer class="bg-dark text-light pt-5 pb-4 container-fluid">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <h6 class="mb-3">For Clients</h6>
+                        <ul class="list-unstyled">
+                            <li class="pb-2">How to hire</li>
+                            <li class="pb-2">Talent Marketplace</li>
+                            <li class="pb-2">Project Catalog</li>
+                            <li class="pb-2">Hire an agency</li>
+                            <li class="pb-2">Enterprise</li>
+                            <li class="pb-2">Business Plus</li>
+                            <li class="pb-2">Any Hire</li>
+                            <li class="pb-2">Contract-to-hire</li>
+                            <li class="pb-2">Direct Contracts</li>
+                            <li class="pb-2">Hire worldwide</li>
+                            <li class="pb-2">Hire in the USA</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <h6 class="mb-3">For Talent</h6>
+                        <ul class="list-unstyled">
+                            <li>How to find work</li>
+                            <li>Direct Contracts</li>
+                            <li>Find freelance jobs worldwide</li>
+                            <li>Find freelance jobs in the USA</li>
+                            <li>Win work with ads</li>
+                            <li>Exclusive resources with Freelancer Plus</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <h6 class="mb-3">Resources</h6>
+                        <ul class="list-unstyled">
+                            <li>Help & support</li>
+                            <li>Success stories</li>
+                            <li>Upwork reviews</li>
+                            <li>Resources</li>
+                            <li>Blog</li>
+                            <li>Affiliate programme</li>
+                            <li>Free Business Tools</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <h6 class="mb-3">Company</h6>
+                        <ul class="list-unstyled">
+                            <li>About us</li>
+                            <li>Leadership</li>
+                            <li>Investor relations</li>
+                            <li>Careers</li>
+                            <li>Our impact</li>
+                            <li>Press</li>
+                            <li>Contact us</li>
+                            <li>Partners</li>
+                            <li>Trust, safety & security</li>
+                            <li>Modern slavery statement</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center border-top pt-3 mt-4">
+                    <div class="d-flex align-items-center">
+                        <span class="me-2">Follow us</span>
+                        <i class="bi bi-facebook me-2"></i>
+                        <i class="bi bi-linkedin me-2"></i>
+                        <i class="bi bi-x me-2"></i>
+                        <i class="bi bi-youtube me-2"></i>
+                        <i class="bi bi-instagram"></i>
+                    </div>
+                    <div>
+                        <span class="me-2">Mobile app</span>
+                        <i class="bi bi-apple me-1"></i>
+                        <i class="bi bi-android2"></i>
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap justify-content-between align-items-center mt-3 small">
+                    <span>© 2025 HireoScope®</span>
+                    <div class="d-flex gap-3">
+                        <span>Terms of Service</span>
+                        <span>Privacy Policy</span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </section>
+    <script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js}"></script>
     <script>
-        [...document.querySelectorAll('.slider-to-clone')].forEach(marquee => {
-            // Get a deep clone of the current marquee
-            const clone = marquee.cloneNode(true);
-            // Disable for screen readers
-            clone.setAttribute('aria-hidden', true)
+        document.querySelectorAll('.card-custom').forEach(card => {
+            let color = card.getAttribute('data-color'); // Get color from HTML
+            card.style.setProperty('--hover-color', color); // Apply color to CSS variable
+        });
 
-            // Add clone after original element.
-            // The second group has a class that delays the animation
-            //  So that it just enters the window as the other group
-            //  is exiting... Making it appear as the same item is starting over.
-            marquee.insertAdjacentElement('afterend', clone)
-        })
+        document.querySelectorAll('.slider-to-clone').forEach(track => {
+            if (!track.dataset.cloned) {
+                const clone = track.cloneNode(true);
+                clone.setAttribute('aria-hidden', 'true');
+                track.parentNode.appendChild(clone); // Append clone inside wrapper
+                track.dataset.cloned = 'true';
+            }
+        });
+
+        const wrapper = document.querySelector('.slider-content-wrapper');
+        document.querySelectorAll('.company-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                wrapper.style.animationPlayState = 'paused';
+            });
+            card.addEventListener('mouseleave', () => {
+                wrapper.style.animationPlayState = 'running';
+            });
+        });
+
+        document.querySelectorAll('.company-slider').forEach(slider => {
+            const wrapper = slider.querySelector('.slider-content-wrapper');
+
+            slider.querySelectorAll('.skill-card').forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    wrapper.style.animationPlayState = 'paused';
+                });
+                card.addEventListener('mouseleave', () => {
+                    wrapper.style.animationPlayState = 'running';
+                });
+            });
+        });
+
+        document.querySelectorAll('.skill-card').forEach(card => {
+            let color = card.getAttribute('data-color'); // Get color from HTML
+            card.style.setProperty('--hover-color', color); // Apply color to CSS variable
+        });
+
+        const scrollContainer = document.getElementById('scrollContainer');
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+
+        function scrollByOneCard(direction) {
+            const cardWidth = scrollContainer.querySelector('.scrollable-job-card').offsetWidth + 16;
+            scrollContainer.scrollBy({
+                left: direction === 'next' ? cardWidth : -cardWidth,
+                behavior: 'smooth'
+            });
+        }
+
+        nextBtn.addEventListener('click', () => scrollByOneCard('next'));
+        prevBtn.addEventListener('click', () => scrollByOneCard('prev'));
+
     </script>
 </body>
 

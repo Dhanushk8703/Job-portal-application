@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class JobDTO {
+    public Long id;
     public String employerEmail;
     public String jobTitle;
     public String jobDescription;

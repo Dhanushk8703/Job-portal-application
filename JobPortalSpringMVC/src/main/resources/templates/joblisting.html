@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Job Listing</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        /* Global body styling */
+        body {
+            background-color: #f7f7f7;
+
+            font-family: "Inter";
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Recommended Jobs Section */
+        .recommended-jobs-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .recommended-jobs-header h4 {
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .recommended-jobs-header .badge-count {
+            background: #e9ecef;
+            color: #000;
+            font-weight: 500;
+            margin-left: 0.5rem;
+            border-radius: 8px;
+            padding: 0.3rem 0.6rem;
+        }
+
+        .recommended-jobs-header .sort-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Job Cards */
+        .job-card {
+            width: 320px;
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            /* creates a visible white border around the header */
+        }
+
+        .job-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Header section inset inside the card */
+        .job-card-header {
+            background-color: #c7f6e9;
+            /* mint/green background */
+            border-radius: 16px;
+            /* same as card's border radius */
+            padding: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        /* Date pill inside the header */
+        .job-date {
+            background-color: #fff;
+            color: #333;
+            font-size: 0.8rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        /* Company row with name and logo */
+        .company-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.25rem;
+        }
+
+        .company-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-right: auto;
+        }
+
+        .company-logo {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+        }
+
+        /* Job title styling */
+        .job-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0.5rem 0 1rem 0;
+            color: #222;
+        }
+
+        /* Badges styling */
+        .job-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .job-badges .badge {
+            background-color: #fff;
+            color: #555;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.75rem;
+        }
+
+        /* Bottom row: salary, location, button */
+        .bottom-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .salary {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .location {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .details-btn {
+            border: none;
+            background-color: #000;
+            color: #fff;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .details-btn:hover {
+            background-color: #333;
+        }
+
+        .filter-sidebar {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 350px;
+            position: sticky;
+            border: 1px solid #ddd;
+        }
+
+        .filter-section {
+            margin-bottom: 30px;
+        }
+
+        .filter-section h6 {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .form-check-label {
+            color: #333;
+        }
+
+        .view-more {
+            color: #0d6efd;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .carousel-wrapper {
+            background-color: #ffefe8;
+            padding: 30px;
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scroll-container {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .job-pill {
+            background-color: white;
+            padding: 12px 30px;
+            border-radius: 12px;
+            white-space: nowrap;
+            font-weight: 500;
+            flex: 0 0 auto;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            border: none;
+        }
+
+        .carousel-control-prev {
+            left: 5px;
+        }
+
+        .carousel-control-next {
+            right: 5px;
+        }
+
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            filter: invert(0) brightness(0) sepia(1) saturate(10) hue-rotate(0deg);
+            width: 0.8rem;
+            height: 0.8rem;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
+        <div class="container">
+            <!-- Logo / Brand -->
+            <a class="navbar-brand" th:href="@{/}">
+                <h4>HireoScope</h4>
+            </a>
+
+            <!-- Toggle button for mobile view -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Nav links -->
+            <div class="collapse navbar-collapse mx-auto" id="navbarNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" th:href="@{jobListing}">Jobs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/companyList}">Companies</a>
+                    </li>
+                </ul>
+                <!-- Right side buttons/links -->
+                <div class="d-flex">
+                    <a href="#" class="btn btn-outline-primary mx-3">Login</a>
+                    <a href="#" class="btn btn-primary">Register</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- TOP BAR -->
+
+    <div class="container my-4">
+        <div class="carousel-wrapper">
+
+            <!-- Prev Button -->
+            <button class="carousel-control-prev" type="button" id="prevBtn">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+
+            <!-- Scrollable Role Pills -->
+            <div class="scroll-container" id="scrollContainer">
+                <div class="job-pill text-center">Salesforce <br> developer Jobs</div>
+                <div class="job-pill text-center">Full Stack <br> Developer Jobs</div>
+                <div class="job-pill text-center">iOS App <br> Developer Jobs</div>
+                <div class="job-pill text-center">Automation <br> Tester Jobs</div>
+                <div class="job-pill text-center">QA Engineer/Software <br> Tester Jobs</div>
+                <div class="job-pill text-center">Android App <br> Developer Jobs</div>
+                <div class="job-pill text-center">DevOps <br> Manager Jobs</div>
+                <div class="job-pill text-center">React <br> Developer Jobs</div>
+                <div class="job-pill text-center">Backend <br> Engineer Jobs</div>
+            </div>
+
+            <!-- Next Button -->
+            <button class="carousel-control-next" type="button" id="nextBtn">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="container-fluid mt-4">
+        <!-- Filter Button for Mobile -->
+        <div class="d-md-none mb-3 text-end">
+            <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#filterSidebar"
+                aria-controls="filterSidebar">
+                Filters
+            </button>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar for larger screens -->
+            <div class="col-lg-3 col-md-6 d-none d-md-block">
+                <div class="filter-sidebar">
+                    <h5>All Filters</h5>
+                    <!-- FILTER CONTENT -->
+                    <div id="filters-content"></div>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="col-lg-9 p-4">
+                <!-- Recommended Jobs Header -->
+                <div class="recommended-jobs-header">
+                    <div class="d-flex align-items-center">
+                        <h4>Recommended jobs</h4>
+                        <span class="badge-count">386</span>
+                    </div>
+                    <div class="sort-label">Sort by: Last updated</div>
+                </div>
+
+                <!-- JOB CARDS ROW -->
+                <div class="row g-3">
+                    <!-- CARD 1: Amazon -->
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="job-card">
+                            <!-- Header Section (Inset with mint background) -->
+                            <div class="job-card-header">
+                                <!-- Date pill -->
+                                <div class="job-date">4 Feb, 2023</div>
+
+                                <!-- Company row (Name and Logo) -->
+                                <div class="company-row">
+                                    <div class="company-name">Google</div>
+                                    <img th:src="@{/images/companyLogoSmall/MNC/GOOG.png}"
+                                        alt="Google Logo" class="company-logo" />
+                                </div>
+
+                                <!-- Job Title -->
+                                <div class="job-title">Junior UI/UX Designer</div>
+
+                                <!-- Badges -->
+                                <div class="job-badges">
+                                    <span class="badge">Full time</span>
+                                    <span class="badge">Junior level</span>
+                                    <span class="badge">Distant</span>
+                                    <span class="badge">Project work</span>
+                                    <span class="badge">Flexible Schedule</span>
+                                </div>
+                            </div>
+
+                            <!-- Card Body Section -->
+                            <div class="job-card-body">
+                                <div class="bottom-row">
+                                    <div>
+                                        <div class="salary">$150/hr</div>
+                                        <div class="location">California, CA</div>
+                                    </div>
+                                    <a class="details-btn text-decoration-none" th:href="@{/jobdesc}">Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="job-card">
+                            <!-- Header Section (Inset with mint background) -->
+                            <div class="job-card-header">
+                                <!-- Date pill -->
+                                <div class="job-date">4 Feb, 2023</div>
+
+                                <!-- Company row (Name and Logo) -->
+                                <div class="company-row">
+                                    <div class="company-name">Google</div>
+                                    <img th:src="@{/images/companyLogoSmall/MNC/GOOG.png}"
+                                        alt="Google Logo" class="company-logo" />
+                                </div>
+
+                                <!-- Job Title -->
+                                <div class="job-title">Junior UI/UX Designer</div>
+
+                                <!-- Badges -->
+                                <div class="job-badges">
+                                    <span class="badge">Full time</span>
+                                    <span class="badge">Junior level</span>
+                                    <span class="badge">Distant</span>
+                                    <span class="badge">Project work</span>
+                                    <span class="badge">Flexible Schedule</span>
+                                </div>
+                            </div>
+
+                            <!-- Card Body Section -->
+                            <div class="job-card-body">
+                                <div class="bottom-row">
+                                    <div>
+                                        <div class="salary">$150/hr</div>
+                                        <div class="location">California, CA</div>
+                                    </div>
+                                    <a class="details-btn text-decoration-none" th:href="@{/jobdesc}">Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="job-card">
+                            <!-- Header Section (Inset with mint background) -->
+                            <div class="job-card-header">
+                                <!-- Date pill -->
+                                <div class="job-date">4 Feb, 2023</div>
+
+                                <!-- Company row (Name and Logo) -->
+                                <div class="company-row">
+                                    <div class="company-name">Google</div>
+                                    <img th:src="@{/images/companyLogoSmall/MNC/GOOG.png}"
+                                        alt="Google Logo" class="company-logo" />
+                                </div>
+
+                                <!-- Job Title -->
+                                <div class="job-title">Junior UI/UX Designer</div>
+
+                                <!-- Badges -->
+                                <div class="job-badges">
+                                    <span class="badge">Full time</span>
+                                    <span class="badge">Junior level</span>
+                                    <span class="badge">Distant</span>
+                                    <span class="badge">Project work</span>
+                                    <span class="badge">Flexible Schedule</span>
+                                </div>
+                            </div>
+
+                            <!-- Card Body Section -->
+                            <div class="job-card-body">
+                                <div class="bottom-row">
+                                    <div>
+                                        <div class="salary">$150/hr</div>
+                                        <div class="location">California, CA</div>
+                                    </div>
+                                    <a class="details-btn text-decoration-none" th:href="@{/jobdesc}">Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="job-card">
+                            <!-- Header Section (Inset with mint background) -->
+                            <div class="job-card-header">
+                                <!-- Date pill -->
+                                <div class="job-date">4 Feb, 2023</div>
+
+                                <!-- Company row (Name and Logo) -->
+                                <div class="company-row">
+                                    <div class="company-name">Google</div>
+                                    <img th:src="@{/images/companyLogoSmall/MNC/GOOG.png}"
+                                        alt="Google Logo" class="company-logo" />
+                                </div>
+
+                                <!-- Job Title -->
+                                <div class="job-title">Junior UI/UX Designer</div>
+
+                                <!-- Badges -->
+                                <div class="job-badges">
+                                    <span class="badge">Full time</span>
+                                    <span class="badge">Junior level</span>
+                                    <span class="badge">Distant</span>
+                                    <span class="badge">Project work</span>
+                                    <span class="badge">Flexible Schedule</span>
+                                </div>
+                            </div>
+
+                            <!-- Card Body Section -->
+                            <div class="job-card-body">
+                                <div class="bottom-row">
+                                    <div>
+                                        <div class="salary">$150/hr</div>
+                                        <div class="location">California, CA</div>
+                                    </div>
+                                    <a class="details-btn text-decoration-none" th:href="@{/jobdesc}">Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="job-card">
+                            <!-- Header Section (Inset with mint background) -->
+                            <div class="job-card-header">
+                                <!-- Date pill -->
+                                <div class="job-date">4 Feb, 2023</div>
+
+                                <!-- Company row (Name and Logo) -->
+                                <div class="company-row">
+                                    <div class="company-name">Google</div>
+                                    <img th:src="@{/images/companyLogoSmall/MNC/GOOG.png}"
+                                        alt="Google Logo" class="company-logo" />
+                                </div>
+
+                                <!-- Job Title -->
+                                <div class="job-title">Junior UI/UX Designer</div>
+
+                                <!-- Badges -->
+                                <div class="job-badges">
+                                    <span class="badge">Full time</span>
+                                    <span class="badge">Junior level</span>
+                                    <span class="badge">Distant</span>
+                                    <span class="badge">Project work</span>
+                                    <span class="badge">Flexible Schedule</span>
+                                </div>
+                            </div>
+
+                            <!-- Card Body Section -->
+                            <div class="job-card-body">
+                                <div class="bottom-row">
+                                    <div>
+                                        <div class="salary">$150/hr</div>
+                                        <div class="location">California, CA</div>
+                                    </div>
+                                    <a class="details-btn text-decoration-none" th:href="@{/jobdesc}">Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="job-card">
+                            <!-- Header Section (Inset with mint background) -->
+                            <div class="job-card-header">
+                                <!-- Date pill -->
+                                <div class="job-date">4 Feb, 2023</div>
+
+                                <!-- Company row (Name and Logo) -->
+                                <div class="company-row">
+                                    <div class="company-name">Google</div>
+                                    <img th:src="@{/images/companyLogoSmall/MNC/GOOG.png}"
+                                        alt="Google Logo" class="company-logo" />
+                                </div>
+
+                                <!-- Job Title -->
+                                <div class="job-title">Junior UI/UX Designer</div>
+
+                                <!-- Badges -->
+                                <div class="job-badges">
+                                    <span class="badge">Full time</span>
+                                    <span class="badge">Junior level</span>
+                                    <span class="badge">Distant</span>
+                                    <span class="badge">Project work</span>
+                                    <span class="badge">Flexible Schedule</span>
+                                </div>
+                            </div>
+
+                            <!-- Card Body Section -->
+                            <div class="job-card-body">
+                                <div class="bottom-row">
+                                    <div>
+                                        <div class="salary">$150/hr</div>
+                                        <div class="location">California, CA</div>
+                                    </div>
+                                    <a class="details-btn text-decoration-none" th:href="@{/jobdesc}">Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Offcanvas Sidebar for Mobile -->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="filterSidebar" aria-labelledby="filterSidebarLabel">
+            <div class="offcanvas-header">
+                <h5 id="filterSidebarLabel">All Filters</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div class="filter-sidebar">
+                    <!-- FILTER CONTENT -->
+                    <div id="filters-content-mobile"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <template id="filters-template">
+        <!-- Department -->
+        <div class="filter-section">
+            <h6>Department</h6>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="dept1">
+                <label class="form-check-label" for="dept1">Engineering - Software (15562)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="dept2">
+                <label class="form-check-label" for="dept2">Sales & Business Dev (10165)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="dept3">
+                <label class="form-check-label" for="dept3">Customer Success (7046)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="dept4">
+                <label class="form-check-label" for="dept4">Finance & Accounts (4737)</label>
+            </div>
+            <div class="view-more">View More</div>
+        </div>
+
+        <!-- Top Companies -->
+        <div class="filter-section">
+            <h6>Top Companies</h6>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="comp1">
+                <label class="form-check-label" for="comp1">Accenture (3916)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="comp2">
+                <label class="form-check-label" for="comp2">Capgemini (622)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="comp3">
+                <label class="form-check-label" for="comp3">Infosys (565)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="comp4">
+                <label class="form-check-label" for="comp4">IndusInd Bank (537)</label>
+            </div>
+            <div class="view-more">View More</div>
+        </div>
+
+        <!-- Experience Slider -->
+        <div class="filter-section">
+            <h6>Experience</h6>
+            <input type="range" class="form-range" min="0" max="30" id="experienceRange">
+            <div class="slider-label">
+                <span>0 Yrs</span>
+                <span>Any</span>
+            </div>
+        </div>
+
+        <!-- Salary -->
+        <div class="filter-section">
+            <h6>Salary</h6>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="sal1">
+                <label class="form-check-label" for="sal1">0-3 Lakhs (20862)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="sal2">
+                <label class="form-check-label" for="sal2">3-6 Lakhs (36441)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="sal3">
+                <label class="form-check-label" for="sal3">6-10 Lakhs (31088)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="sal4">
+                <label class="form-check-label" for="sal4">10-15 Lakhs (21077)</label>
+            </div>
+            <div class="view-more">View More</div>
+        </div>
+
+        <!-- Location -->
+        <div class="filter-section">
+            <h6>Location</h6>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="loc1">
+                <label class="form-check-label" for="loc1">Bengaluru (19726)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="loc2">
+                <label class="form-check-label" for="loc2">Delhi / NCR (13236)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="loc3">
+                <label class="form-check-label" for="loc3">Mumbai (10605)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="loc4">
+                <label class="form-check-label" for="loc4">Hyderabad (10494)</label>
+            </div>
+            <div class="view-more">View More</div>
+        </div>
+
+        <!-- Company Type -->
+        <div class="filter-section">
+            <h6>Company Type</h6>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="ctype1">
+                <label class="form-check-label" for="ctype1">Foreign MNC (17223)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="ctype2">
+                <label class="form-check-label" for="ctype2">Corporate (13954)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="ctype3">
+                <label class="form-check-label" for="ctype3">Indian MNC (5064)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="ctype4">
+                <label class="form-check-label" for="ctype4">Startup (2174)</label>
+            </div>
+            <div class="view-more">View More</div>
+        </div>
+    </template>
+
+    <script>
+        const template = document.getElementById('filters-template');
+        const filtersContent = template.content.cloneNode(true);
+        document.getElementById('filters-content').appendChild(filtersContent);
+
+        const filtersMobile = template.content.cloneNode(true);
+        document.getElementById('filters-content-mobile').appendChild(filtersMobile);
+
+
+        const scrollContainer = document.getElementById('scrollContainer');
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+
+        function scrollByOneCard(direction) {
+            const cardWidth = scrollContainer.querySelector('.job-pill').offsetWidth + 16;
+            scrollContainer.scrollBy({
+                left: direction === 'next' ? cardWidth : -cardWidth,
+                behavior: 'smooth'
+            });
+        }
+
+        nextBtn.addEventListener('click', () => scrollByOneCard('next'));
+        prevBtn.addEventListener('click', () => scrollByOneCard('prev'));
+    </script>
+
+    <!-- Bootstrap JS (Optional for dropdowns, modals, etc.) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

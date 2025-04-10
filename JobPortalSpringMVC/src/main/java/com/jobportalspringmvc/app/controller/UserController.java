@@ -16,6 +16,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 public class UserController {
@@ -77,8 +80,16 @@ public class UserController {
 
             if (response.getStatusCode() == HttpStatus.CREATED) {
                 redirectAttributes.addFlashAttribute("message", "Registration successful! Please login.");
-
-                return "redirect:/company-form?email=" + email;
+                if(backendRole == Role.EMPLOYER) {
+                    return "redirect:/company-form?email=" + email;
+                }
+                else if(backendRole == Role.JOBSEEKER) {
+                    return "redirect:/jobseeker-register?email=" + email;
+                }
+                else {
+                    redirectAttributes.addFlashAttribute("error", "Invalid role.");
+                    return "redirect:/role";
+                }
             } else {
                 redirectAttributes.addFlashAttribute("error",
                         "Registration failed. Backend returned: " + response.getStatusCode());
@@ -139,7 +150,7 @@ public class UserController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            redirectAttributes.addFlashAttribute("error", "Invalid credentials or server error.");
+            redirectAttributes.addFlashAttribute("error", "Login failed. Invalid credentials,Please Enter a Valid Email and Password.");
         }
 
         return "redirect:/login";
@@ -153,6 +164,8 @@ public class UserController {
         }
         String email = (String) session.getAttribute("email");
         model.addAttribute("email", email);
+        String employerEmail = (String) session.getAttribute("email");
+
         return "employer-home";
     }
 
@@ -234,7 +247,7 @@ public class UserController {
         HttpEntity<JobDTO> request = new HttpEntity<>(jobDto, headers);
 
         ResponseEntity<String> response = restTemplate.postForEntity(
-                baseUrl + "/api/jobs", request, String.class);
+                baseUrl + "/employer/api/jobs", request, String.class);
 
         if (response.getStatusCode() == HttpStatus.CREATED) {
             redirectAttributes.addFlashAttribute("message", "Job posted successfully!");
@@ -245,4 +258,38 @@ public class UserController {
             return "redirect:/employer/postjob";
         }
     }
+
+    @GetMapping("/jobListing")
+    public String showJobListing() {
+        return "joblisting";
+    }
+
+    @GetMapping("/companyList")
+    public String showCompanyListing() {
+        return "companylist";
+    }
+
+    @GetMapping("/signUp")
+    public String showSignUpForm() {
+        return "signInSignUp";
+    }
+    @GetMapping("/jobdesc")
+    public String getJobDesc() {
+        return "jobdesc";
+    }
+    @GetMapping("/companydesc")
+    public String getCompanyDesc() {
+        return "companydesc";
+    }
+    @GetMapping("/jobseeker-register")
+    public String showJobSeekerRegisterForm() {
+        return "jobseeker_register";
+    }
+    @GetMapping("/admin-dashboard")
+    public String adminDashboard() {
+        return "admin";
+    }
+
+    
+    
 }

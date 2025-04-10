@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class SecurityConfig {
@@ -27,11 +29,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+        .cors() 
+        .and()
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                	    .requestMatchers("/auth/login", "/auth/register","/api/jobs","/auth/api/company").permitAll()
+                	    .requestMatchers("/auth/login", "/auth/register","/api/jobs","/auth/api/company","/admin-dashboard").permitAll()
                 	    .requestMatchers("/employer/**").hasAuthority("EMPLOYER")
-                        .requestMatchers(HttpMethod.POST,"/api/jobs").permitAll()
+                       
                 	    .requestMatchers("/jobseeker/**").hasAuthority("JOBSEEKER")
                 	    .anyRequest().authenticated()
                 	)
@@ -41,6 +45,8 @@ public class SecurityConfig {
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
+    
 
     @Bean
     public AuthenticationProvider authenticationProvider() {

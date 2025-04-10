@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 public class JobDTO {
+    public Long id;
     public String employerEmail;
     public String jobTitle;
     public String jobDescription;
@@ -16,7 +17,6 @@ public class JobDTO {
     public String requiredSkills;
     public String experience;
     public String jobStatus;
-    public String shift;
     public double minSalary;
     public double maxSalary;
     public LocalDate applicationDeadline;

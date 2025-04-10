@@ -2,6 +2,7 @@ package com.jobportalrestapi.app.services;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class JobService {
         job.setEligibility(dto.eligibility);
         job.setRequiredSkills(dto.requiredSkills);
         job.setExperience(dto.experience);
-        job.setJobStatus(dto.jobStatus);
+        job.setJobStatus("draft");
         job.setApplicationDeadline(dto.applicationDeadline);
         job.setJobPostedDate(LocalDate.now());
         job.setMinSalary(dto.minSalary);
@@ -41,6 +42,7 @@ public class JobService {
     
     private JobDTO convertToDto(Job job) {
         JobDTO dto = new JobDTO();
+        dto.setId(job.getJobId());
         dto.setEmployerEmail(job.getEmployerEmail());
         dto.setJobTitle(job.getJobTitle());
         dto.setJobDescription(job.getJobDescription());
@@ -54,6 +56,38 @@ public class JobService {
         dto.setMaxSalary(job.getMaxSalary());
         dto.setApplicationDeadline(job.getApplicationDeadline());
         return dto;
+    }
+
+    public Job postJobById(Long jobId) {
+        Optional<Job> jobOptional = jobRepository.findById(jobId);
+        if (jobOptional.isPresent()) {
+            Job job = jobOptional.get();
+            job.setJobStatus("posted");
+            return jobRepository.save(job);
+        } else {
+            throw new RuntimeException("Job not found");
+        }
+        
+    }
+    public void deleteJobById(Long jobId) {
+        Optional<Job> job = jobRepository.findById(jobId);
+        if (job.isEmpty()) {
+            throw new RuntimeException("Job not found");
+        }
+        else{
+            jobRepository.deleteById(jobId);
+        }
+    }
+    public Job getJobById(Long jobId) {
+        return jobRepository.findById(jobId).orElse(null);
+    }
+    public List<Job> getAllJobs() {
+        return jobRepository.findAll();
+    }
+
+    public List<JobDTO> getPostedJobsByEmployer(String employerEmail) {
+        List<Job> draftJobs = jobRepository.findByEmployerEmailAndJobStatus(employerEmail, "posted");
+        return draftJobs.stream().map(this::convertToDto).toList();
     }
 }
 

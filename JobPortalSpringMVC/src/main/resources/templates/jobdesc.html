@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Posting</title>
+    <link th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css}" rel="stylesheet">
+    <link th:href="@{https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap}" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .card {
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-bg {
+            background-image: url('../images/BackDrops/CompanyDescription/company-description-white.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 120px;
+            position: relative;
+            border-radius: 1rem 1rem 0 0;
+        }
+
+        /* Floating Company Logo Style */
+        .company-logo {
+            position: absolute;
+            bottom: -32px;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 64px;
+            width: 64px;
+            border-radius: 12px;
+            background-color: white;
+            padding: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 3px solid white;
+            object-fit: contain;
+            z-index: 10;
+        }
+
+        @media (max-width: 576px) {
+            .company-logo {
+                height: 48px;
+                width: 48px;
+                bottom: -24px;
+                padding: 6px;
+                border-radius: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/}">
+                <h4>HireoScope</h4>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse mx-auto" id="navbarNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" th:href="@{/jobListing}">Jobs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/companyList}">Companies</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a href="#" class="btn btn-outline-primary mx-3">Login</a>
+                    <a href="#" class="btn btn-primary">Register</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-bg">
+                        <img th:src="@{/images/companyLogoSmall/MNC/GOOG.png}" alt="Company logo"
+                            class="company-logo mx-auto d-block" height="50">
+                    </div>
+                    <div class="card-header p-5">
+                        <div class="header-content">
+                            <h1 class="h3 font-weight-bold">UI/UX Developer</h1>
+                            <p>Explore exciting opportunities and be part of a dynamic team shaping the future of
+                                technology.</p>
+                            <p><i class="far fa-calendar-alt"></i> Posted on: Jan 20, 2025</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h2 class="h5 font-weight-bold mb-4">Job description</h2>
+                        <p>Join our team to work on cutting-edge projects that make a difference. Collaborate with
+                            talented professionals and grow your career in a supportive environment. Your expertise will
+                            help shape the future of technology and innovation.</p>
+                        <p>We are looking for a passionate UI/UX Developer to join our team. The ideal candidate will
+                            have a strong understanding of user-centered design principles and experience in creating
+                            intuitive and visually appealing interfaces. Your role will involve collaborating with
+                            cross-functional teams to deliver exceptional user experiences.</p>
+                        <h2 class="h5 font-weight-bold mb-4">Required Skills</h2>
+                        <ul>
+                            <li>Proven experience in UI/UX design with a strong portfolio showcasing user-centered
+                                designs.</li>
+                            <li>Proficiency in design tools such as Adobe XD, Figma, or Sketch.</li>
+                            <li>Strong understanding of HTML, CSS, and JavaScript for rapid prototyping.</li>
+                            <li>Excellent communication skills and ability to collaborate with cross-functional teams.
+                            </li>
+                        </ul>
+
+                        <h2 class="h5 font-weight-bold mb-4">Eligibility</h2>
+                        <ul>
+                            <li>B.E/B.Tech Any Specializations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card card-custom">
+                    <div class="card-body">
+                        <h2 class="h5 font-weight-bold mb-4">Apply now</h2>
+                        <p>Take the next step in your career by joining a company that values innovation and creativity.
+                        </p>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-map-marker-alt mr-2"></i>Remote</li>
+                            <li class="mb-2"><i class="fas fa-briefcase mr-2"></i>Senior</li>
+                            <li class="mb-2"><i class="fas fa-code mr-2"></i>Development</li>
+                            <li class="mb-2"><i class="fas fa-clock mr-2"></i>Full Time</li>
+                            <li><i class="fas fa-dollar-sign mr-2"></i>$100,000 USD</li>
+                        </ul>
+                        <button class="btn btn-primary btn-block">Apply now</button>
+                    </div>
+                </div>
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h2 class="h5 font-weight-bold mb-4">About Google</h2>
+                        <p>Google is a global leader in technology, known for its innovative solutions and commitment to
+                            improving the way people connect and access information. Join a company that values
+                            creativity, collaboration, and making a positive impact on the world.</p>
+                        <button class="btn btn-primary btn-block">View company</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{https://code.jquery.com/jquery-3.5.1.slim.min.js}"></script>
+    <script th:src="@{https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js}"></script>
+    <script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
+</body>
+
+</html>
