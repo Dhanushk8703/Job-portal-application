@@ -84,7 +84,7 @@ public class UserController {
                     return "redirect:/company-form?email=" + email;
                 }
                 else if(backendRole == Role.JOBSEEKER) {
-                    return "redirect:/jobseeker-register?email=" + email;
+                    return "redirect:/jobseeker/register?email=" + email;
                 }
                 else {
                     redirectAttributes.addFlashAttribute("error", "Invalid role.");
@@ -288,8 +288,5 @@ public class UserController {
     @GetMapping("/admin-dashboard")
     public String adminDashboard() {
         return "admin";
-    }
-
-    
-    
+    }  
 }
