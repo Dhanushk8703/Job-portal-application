@@ -20,13 +20,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jobportalspringmvc.app.dto.EducationDTO;
 import com.jobportalspringmvc.app.dto.JobDTO;
+import com.jobportalspringmvc.app.dto.JobListingDTO;
 import com.jobportalspringmvc.app.dto.JobSeekerDTO;
 import com.jobportalspringmvc.app.dto.SkillDTO;
 import com.jobportalspringmvc.app.dto.WorkExperienceDTO;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.RequestParam;
-
 
 @Controller
 public class JobSeekerController {
@@ -86,36 +86,64 @@ public class JobSeekerController {
 
     // @GetMapping("/jobseeker/profile")
     // public String showJobSeekerProfile(HttpSession session, Model model) {
-    //     String apiUrl = baseUrl + "/api/jobseeker/profile";
+    // String apiUrl = baseUrl + "/api/jobseeker/profile";
 
-    //     try {
-    //         RestTemplate restTemplate = new RestTemplate();
-    //         String token = (String) session.getAttribute("token");
-    //         HttpHeaders headers = new HttpHeaders();
-    //         headers.setContentType(MediaType.APPLICATION_JSON);
-    //         headers.set("Authorization", "Bearer " + token);
+    // try {
+    // RestTemplate restTemplate = new RestTemplate();
+    // String token = (String) session.getAttribute("token");
+    // HttpHeaders headers = new HttpHeaders();
+    // headers.setContentType(MediaType.APPLICATION_JSON);
+    // headers.set("Authorization", "Bearer " + token);
 
-    //         ResponseEntity<JobSeekerDTO> response = restTemplate.getForEntity(apiUrl, JobSeekerDTO.class, headers);
+    // ResponseEntity<JobSeekerDTO> response = restTemplate.getForEntity(apiUrl,
+    // JobSeekerDTO.class, headers);
 
-    //         if (response.getStatusCode().is2xxSuccessful()) {
-    //             JobSeekerDTO jobSeekerDto = response.getBody();
-    //             model.addAttribute("jobSeekerDto", jobSeekerDto);
-    //         } else {
-    //             model.addAttribute("error", "Failed to fetch profile data.");
-    //         }
+    // if (response.getStatusCode().is2xxSuccessful()) {
+    // JobSeekerDTO jobSeekerDto = response.getBody();
+    // model.addAttribute("jobSeekerDto", jobSeekerDto);
+    // } else {
+    // model.addAttribute("error", "Failed to fetch profile data.");
+    // }
 
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         model.addAttribute("error", "An error occurred while fetching the profile data.");
-    //     }
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // model.addAttribute("error", "An error occurred while fetching the profile
+    // data.");
+    // }
 
-    //     return "jobseeker_profile";
+    // return "jobseeker_profile";
     // }
 
     @GetMapping("/jobseeker/profile")
     public String getMethodName() {
         return "jobseeker"; // Return the correct view name
     }
-    
+
+    @GetMapping("/jobListing")
+    public String getPostedJobs(Model model) {
+        // Construct the URL for the API
+        String apiUrl = baseUrl + "/api/jobs/jobseeker/listings/posted"; // Your API endpoint
+
+        // Create RestTemplate instance to send GET request to the API
+        RestTemplate restTemplate = new RestTemplate();
+
+        // Send GET request and retrieve response
+        ResponseEntity<JobListingDTO[]> response = restTemplate.getForEntity(apiUrl, JobListingDTO[].class);
+
+        // If response body is not null, proceed to pass data to the model
+        if (response.getBody() != null) {
+            JobListingDTO[] jobListings = response.getBody();
+
+            // Add the jobListings data to the model to make it available to the Thymeleaf
+            // template
+            model.addAttribute("jobListings", jobListings);
+        } else {
+            // Handle the case if the response body is empty (optional)
+            model.addAttribute("jobListings", new JobListingDTO[0]);
+        }
+
+        // Return the name of the Thymeleaf template to be rendered
+        return "joblisting"; // Ensure this matches the name of your Thymeleaf HTML template
+    }
 
 }

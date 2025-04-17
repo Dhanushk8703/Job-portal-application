@@ -31,6 +31,7 @@ public class JobController {
     @Autowired
     private JobService jobService;
 
+    
     @PostMapping("/jobs")
     public ResponseEntity<Job> createJob(@RequestBody JobDTO jobDto) {
 
@@ -81,4 +82,6 @@ public class JobController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    
 }
