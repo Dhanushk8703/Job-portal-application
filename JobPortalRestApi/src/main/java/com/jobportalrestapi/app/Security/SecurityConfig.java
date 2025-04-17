@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                 	    .requestMatchers("/auth/login", "/auth/register","/api/jobs","/auth/api/company","/admin-dashboard").permitAll()
-                	    .requestMatchers("/employer/**").hasAuthority("EMPLOYER")
+                	    .requestMatchers("/employer/**","/employer/api/**").hasAuthority("EMPLOYER")
                        
                 	    .requestMatchers("/jobseeker/**").hasAuthority("JOBSEEKER")
                 	    .anyRequest().authenticated()

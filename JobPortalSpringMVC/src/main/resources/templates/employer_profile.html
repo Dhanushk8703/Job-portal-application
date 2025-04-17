@@ -285,11 +285,13 @@
                 <h2>My Info</h2>
                 <div class="card">
                     <h3>Account <span class="edit-btn" id="editButton">✎ Edit</span></h3>
+                
                     <div id="accountView">
                         <p><strong>Name:</strong> <span id="displayName" th:text="${userName}">Varun K</span></p>
                         <p><strong>Email:</strong> <span id="displayEmail" th:text="${userEmail}">example@mail.com</span></p>
                     </div>
-
+                
+                    <!-- Account Edit Form (Initially hidden) -->
                     <form id="accountEditForm" class="hidden">
                         <div class="mb-3">
                             <label class="form-label">First Name</label>
@@ -312,17 +314,35 @@
 
                 <div class="company-card card p-3">
                     <h3>Company Details <span class="edit-btn text-primary" style="cursor: pointer;">✎ Edit</span></h3>
+                    
                     <div class="text-center">
-                        <img id="displayCompanyLogo" th:src="@{/images/default-logo.png}" class="img-fluid rounded-circle mb-3" width="100">
+                        <img id="displayCompanyLogo"
+                             th:src="${company.logoBytes != null} ? @{|data:image/png;base64,${T(org.apache.tomcat.util.codec.binary.Base64).encodeBase64String(company.logoBytes)}|} : @{/images/default-logo.png}"
+                             class="img-fluid rounded-circle mb-3"
+                             width="100" />
                     </div>
-                    <p><strong>Company Name:</strong> <span id="displayCompanyName" th:text="${companyName}">Varun K</span></p>
-                    <p><strong>Company Type:</strong> <span id="displayCompanyType" th:text="${companyType}">Private</span></p>
-                    <p><strong>Industry:</strong> <span id="displayIndustry" th:text="${industry}">IT Services</span></p>
-                    <p><strong>Company Size:</strong> <span id="displayCompanySize" th:text="${companySize}">10-99 employees</span></p>
-                    <p><strong>Website:</strong> <a href="#" id="displayCompanyWebsite" th:href="${companyWebsite}" target="_blank">www.example.com</a></p>
-                    <p><strong>LinkedIn:</strong> <a href="#" id="displayLinkedIn" th:href="${linkedinProfile}" target="_blank">linkedin.com/company</a></p>
-                    <p><strong>Description:</strong> <span id="displayCompanyDescription" th:text="${companyDescription}">A leading tech firm</span></p>
+                
+                    <p><strong>Company Name:</strong> <span id="displayCompanyName" th:text="${company.companyName}">Company Name</span></p>
+                    <p><strong>Company Type:</strong> <span id="displayCompanyType" th:text="${company.companyType}">Type</span></p>
+                    <p><strong>Industry:</strong> <span id="displayIndustry" th:text="${company.industry}">Industry</span></p>
+                    <p><strong>Company Size:</strong> <span id="displayCompanySize" th:text="${company.companySize}">Size</span></p>
+                    <p><strong>Phone:</strong> <span id="displayCompanyPhone" th:text="${company.companyPhone}">1234567890</span></p>
+                    <p><strong>Website:</strong>
+                        <a th:href="@{${company.companyWebsite}}" th:text="${company.companyWebsite}" target="_blank">www.example.com</a>
+                    </p>
+                    <p><strong>LinkedIn:</strong>
+                        <a th:href="@{${company.linkedinProfile}}" th:text="${company.linkedinProfile}" target="_blank">linkedin.com/company</a>
+                    </p>
+                    <p><strong>Description:</strong> <span id="displayCompanyDescription" th:text="${company.companyDescription}">Description</span></p>
+                
+                    <p><strong>Location:</strong>
+                        <span th:text="${company.city}">City</span>,
+                        <span th:text="${company.state}">State</span>,
+                        <span th:text="${company.pincode}">Pincode</span>,
+                        <span th:text="${company.country}">Country</span>
+                    </p>
                 </div>
+                
             </div>
 
             <div class="tab-content hidden" id="billing">

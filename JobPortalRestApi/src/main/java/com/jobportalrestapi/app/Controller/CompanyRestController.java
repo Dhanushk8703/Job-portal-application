@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/auth")
 public class CompanyRestController {
 
     private final CompanyRepository companyRepository;
@@ -25,13 +24,20 @@ public class CompanyRestController {
         this.companyService = companyService;
     }
 
-    @PostMapping("/api/company")
+    @PostMapping("/auth/api/company")
     public ResponseEntity<String> saveCompany(@RequestBody Company company) {
         companyRepository.save(company);
         return ResponseEntity.ok("Company saved successfully");
     }
 
-    @GetMapping
+    @GetMapping("/api/company/{employerEmail}")
+    public ResponseEntity<Company> getCompanyByEmail(@PathVariable String employerEmail) {
+        return companyService.findByEmail(employerEmail)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/auth/api/company")
     public ResponseEntity<List<Company>> getAllCompanies() {
         return ResponseEntity.ok(companyRepository.findAll());
     }

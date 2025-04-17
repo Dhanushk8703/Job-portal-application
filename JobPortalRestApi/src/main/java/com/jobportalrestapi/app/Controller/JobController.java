@@ -60,25 +60,55 @@ public class JobController {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteJobById(@PathVariable Long id) {
-        Job jobOptional = jobService.getJobById(id);
-        if (jobOptional == null) {
-            return ResponseEntity.notFound().build();
-        }
-        else{
-            jobService.deleteJobById(id);
-            return ResponseEntity.noContent().build();
-        }
-    }
-
-    @GetMapping("/job/{id}")
-    public ResponseEntity<Job> getJobById(@PathVariable Long id) {
-        Job job = jobService.getJobById(id);
+    @PutMapping("/draft/{id}")
+    public ResponseEntity<Job> draftJobById(@PathVariable Long id) {
+        Job job = jobService.draftJobById(id);
         if (job != null) {
             return ResponseEntity.ok(job);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteJobById(@PathVariable Long id) {
+        JobDTO jobOptional = jobService.getJobById(id);
+        if (jobOptional == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            jobService.deleteJobById(id);
+            return ResponseEntity.noContent().build();
+        }
+    }
+
+    @GetMapping("/job/{id}")
+    public ResponseEntity<JobDTO> getJobDetailById(@PathVariable Long id) {
+        JobDTO jobDTO = jobService.getJobById(id);
+        if (jobDTO != null) {
+            return ResponseEntity.ok(jobDTO);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/job/{id}")
+    public ResponseEntity<JobDTO> updateJobDetails(@PathVariable Long id, @RequestBody JobDTO updatedJob) {
+        JobDTO job = jobService.updateJobDetails(id, updatedJob);
+        if (job != null) {
+            return ResponseEntity.ok(job);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/job/details/{id}")
+    public ResponseEntity<JobDTO> getJobDetailsById(@PathVariable Long id) {
+        JobDTO job = jobService.getJobById(id);
+        if (job != null) {
+            return ResponseEntity.ok(job);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

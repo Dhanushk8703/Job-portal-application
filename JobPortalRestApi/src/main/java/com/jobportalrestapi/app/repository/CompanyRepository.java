@@ -6,4 +6,6 @@ import com.jobportalrestapi.app.model.Company;
 
 public interface CompanyRepository extends JpaRepository<Company, Long> {
 
+    Company findByEmployerEmail(String email);
+
 }
