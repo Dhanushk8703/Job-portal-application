@@ -17,8 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jobportalrestapi.app.model.Company;
+import com.jobportalrestapi.app.model.CompanyStatus;
 import com.jobportalrestapi.app.model.Job;
 import com.jobportalrestapi.app.model.JobDTO;
+import com.jobportalrestapi.app.services.CompanyService;
 import com.jobportalrestapi.app.services.JobService;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,13 +33,32 @@ public class JobController {
 
     @Autowired
     private JobService jobService;
+    @Autowired
+    private CompanyService companyService;
 
-    @PostMapping("/jobs")
-    public ResponseEntity<Job> createJob(@RequestBody JobDTO jobDto) {
+  @PostMapping("/jobs")
+public ResponseEntity<?> createJob(@RequestBody JobDTO jobDto) {
+    try {
+        Long companyId = Long.parseLong(jobDto.getCompanyId()); // Convert from String to Long
+        Company company = companyService.getCompanyById(companyId);
+
+        if (company == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Company not found");
+        }
+
+        if (company.getStatus() != CompanyStatus.APPROVED) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("Your company is not approved yet. You cannot post jobs.");
+        }
 
         Job job = jobService.createJob(jobDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(job);
+
+    } catch (NumberFormatException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid company ID format");
     }
+}
+
 
     @GetMapping("/drafts")
     public List<JobDTO> getDraftJobs(@RequestParam String employerEmail) {
@@ -81,4 +103,5 @@ public class JobController {
             return ResponseEntity.notFound().build();
         }
     }
+ 
 }

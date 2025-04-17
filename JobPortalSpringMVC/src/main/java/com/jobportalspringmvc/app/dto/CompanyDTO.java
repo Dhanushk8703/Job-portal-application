@@ -1,9 +1,7 @@
 package com.jobportalspringmvc.app.dto;
 
 import org.springframework.web.multipart.MultipartFile;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,7 +27,9 @@ public class CompanyDTO {
     private String linkedinProfile;
 
     @JsonIgnore
-    private MultipartFile logo;
+    private MultipartFile logo;  // This will not be serialized to JSON
 
     private byte[] logoBytes;
+
+    private String status; // Added status field to track approval status (e.g., "Pending", "Approved", "Rejected")
 }

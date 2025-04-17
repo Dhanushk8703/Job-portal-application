@@ -58,4 +58,9 @@ public class Company {
     @Lob
     @Column(name = "logo")
     private byte[] logo;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private CompanyStatus status = CompanyStatus.PENDING;
 }
+

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #376FFF;
+      --secondary-color: #e74c3c;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+    body {
+      display: flex;
+      background-color: #ecf1fb;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .sidebar {
+      width: 90px;
+      padding: 20px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+    }
+    .sidebar-section {
+      background-color: #fff;
+      border-radius: 40px;
+      padding: 15px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      gap: 20px;
+    }
+    .logo img {
+      width: 36px;
+      filter: brightness(0);
+    }
+    .nav-icon {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-radius: 50%;
+    }
+    .nav-icon img {
+      width: 22px;
+      filter: brightness(0);
+      transition: all 0.3s ease;
+    }
+    .nav-icon:hover {
+      background-color: var(--primary-color);
+      transform: scale(1.15);
+      box-shadow: 0 8px 20px rgba(55, 111, 255, 0.3);
+    }
+    .nav-icon:hover img {
+      filter: invert(1);
+    }
+    .nav-icon.active {
+      background-color: var(--primary-color);
+    }
+    .nav-icon.active img {
+      filter: invert(1);
+    }
+    .main {
+      flex: 1;
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.header-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+.user-profile img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+    .approval-card {
+  padding: 20px 24px;
+  border-left: 5px solid var(--primary-color);
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  background: #fff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+}
+
+.company-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.company-header h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+  color: #2c3e50;
+}
+
+.status-badge {
+  background: #f4d03f;
+  color: #2c3e50;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 50px;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 15px;
+  color: #444;
+  border-bottom: 1px dashed #ececec;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-row a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.info-icon {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+.btn-group {
+  margin-top: 20px;
+  display: flex;
+  gap: 14px;
+}
+
+.btn-approve, .btn-reject {
+  padding: 8px 22px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn-approve {
+  background-color: var(--primary-color);
+  color: white;
+}
+.btn-approve:hover {
+  background-color: #2f5bd4;
+  transform: scale(1.05);
+}
+.btn-reject {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.btn-reject:hover {
+  background-color: #c0392b;
+  transform: scale(1.05);
+}
+.info-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.label {
+  font-weight: bold;
+  min-width: 80px;
+}
+
+.value {
+  color: #1a0dab;
+  word-break: break-word;
+}
+
+/* On smaller screens, stack items vertically */
+@media (max-width: 600px) {
+  .info-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .label {
+    margin-bottom: 2px;
+  }
+}
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo">
+      <h1>H</h1>
+    </div>
+    <div class="sidebar-section">
+      <div class="nav-icon">
+        <img th:src="@{https://img.icons8.com/ios-filled/50/000000/combo-chart--v1.png}" alt="Analytics">
+      </div>
+      <div class="nav-icon active">
+        <img th:src="@{https://img.icons8.com/ios-filled/50/000000/conference-call.png}" alt="User Management">
+      </div>
+      <div class="nav-icon">
+        <img th:src="@{https://img.icons8.com/ios-filled/50/000000/faq.png}" alt="Query">
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="nav-icon">
+        <img th:src="@{https://img.icons8.com/ios-filled/50/000000/settings.png}" alt="Settings">
+      </div>
+      <div class="nav-icon">
+        <img th:src="@{https://img.icons8.com/ios-filled/50/000000/logout-rounded-left.png}" alt="Logout">
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="header">
+      <div class="header-title">Pending Employer Approvals</div>
+    </div>
+    <div class="grid">
+        <div class="card approval-card" th:each="company : ${pendingCompanies}">
+          <div class="company-header">
+            <h3 th:text="${company.companyName}">Company Name</h3>
+            <span class="status-badge" th:text="${company.status}">Pending</span>
+          </div>
+          <div class="info-row"><strong>Email:</strong> <span th:text="${company.employerEmail}">email@company.com</span></div>
+          <div class="info-row"><strong>Website:</strong> 
+            <a th:href="'https://' + ${company.companyWebsite}" target="_blank" th:text="${company.companyWebsite}">example.com</a>
+          </div>
+          <div class="info-row"><strong>LinkedIn:</strong> 
+            <a th:href="${company.linkedinProfile}" target="_blank" th:text="${company.linkedinProfile}">linkedin.com</a>
+          </div>
+          <div class="btn-group">
+            <form th:action="@{'/admin/companies/' + ${company.id} + '/approve'}" method="post">
+              <button class="btn-approve" type="submit">Approve</button>
+            </form>
+            <form th:action="@{'/admin/companies/' + ${company.id} + '/reject'}" method="post">
+              <button class="btn-reject" type="submit">Reject</button>
+            </form>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+</body>
+</html>

@@ -20,5 +20,6 @@ public class JobDTO {
     public double minSalary;
     public double maxSalary;
     public LocalDate applicationDeadline;
+    private String companyId;
 }
 

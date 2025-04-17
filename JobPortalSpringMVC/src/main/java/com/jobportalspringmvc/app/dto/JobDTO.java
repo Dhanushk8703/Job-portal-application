@@ -13,6 +13,7 @@ public class JobDTO {
     public String workMode;
     public String location;
     public String eligibility;
+    public String companyId;
     public String requiredSkills;
     public String experience;
     public String jobStatus;

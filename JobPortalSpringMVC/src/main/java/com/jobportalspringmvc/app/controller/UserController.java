@@ -16,8 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -230,7 +228,7 @@ public class UserController {
         return "employer_profile";
     }
 
-    @PostMapping("/employer/postjob")
+@PostMapping("/employer/postjob")
     public String handleJobPosting(@ModelAttribute JobDTO jobDto,
             HttpSession session,
             RedirectAttributes redirectAttributes) {
