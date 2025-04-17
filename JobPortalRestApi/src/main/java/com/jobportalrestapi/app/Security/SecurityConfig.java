@@ -33,8 +33,8 @@ public class SecurityConfig {
         .and()
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                	    .requestMatchers("/auth/login", "/auth/register","/api/jobs","/auth/api/company","/admin-dashboard").permitAll()
-                	    .requestMatchers("/employer/**","/employer/api/**").hasAuthority("EMPLOYER")
+                	    .requestMatchers("/auth/login", "/auth/register","/api/jobs","/auth/api/company","/admin-dashboard","/api/jobseeker/register","/api/jobs/jobseeker/**").permitAll()
+                	    .requestMatchers("/employer/**").hasAuthority("EMPLOYER")
                        
                 	    .requestMatchers("/jobseeker/**").hasAuthority("JOBSEEKER")
                 	    .anyRequest().authenticated()

@@ -1,5 +1,6 @@
 package com.jobportalspringmvc.app.controller;
 
+import com.jobportalspringmvc.app.dto.JobDTO;
 import com.jobportalspringmvc.app.dto.Role;
 import com.jobportalspringmvc.app.dto.UserDTO;
 
@@ -83,7 +84,7 @@ public class UserController {
                     return "redirect:/company-form?email=" + email;
                 }
                 else if(backendRole == Role.JOBSEEKER) {
-                    return "redirect:/jobseeker-register?email=" + email;
+                    return "redirect:/jobseeker/register?email=" + email;
                 }
                 else {
                     redirectAttributes.addFlashAttribute("error", "Invalid role.");
@@ -161,4 +162,109 @@ public class UserController {
         redirectAttributes.addFlashAttribute("message", "You have been logged out successfully.");
         return "redirect:/login";
     }
+
+    @GetMapping("/employer/candidates")
+    public String showEmployerCandidates(HttpSession session, RedirectAttributes redirectAttributes) {
+        if (!"EMPLOYER".equalsIgnoreCase((String) session.getAttribute("role"))) {
+            redirectAttributes.addFlashAttribute("error", "Access denied.");
+            return "redirect:/login";
+        }
+
+        return "employer-candidates";
+    }
+
+    @GetMapping("/employer/myjobs")
+    public String showEmployerMyJobs(HttpSession session, RedirectAttributes redirectAttributes) {
+        if (!"EMPLOYER".equalsIgnoreCase((String) session.getAttribute("role"))) {
+            redirectAttributes.addFlashAttribute("error", "Access denied.");
+            return "redirect:/login";
+        }
+
+        return "employer-myjobs";
+    }
+
+    @GetMapping("/employer/postjob")
+    public String showJobPostingForm(
+            HttpSession session,
+            RedirectAttributes redirectAttributes,
+            Model model) {
+        if (!"EMPLOYER".equalsIgnoreCase((String) session.getAttribute("role"))) {
+            redirectAttributes.addFlashAttribute("error", "Access denied.");
+            return "redirect:/login";
+        }
+
+        model.addAttribute("email", session.getAttribute("email")); // 👈 makes it available in the template
+        model.addAttribute("jobDto", new JobDTO());
+        return "job_posting_form"; // ✅ just the view name — no query param!
+    }
+
+    @GetMapping("/employer/profile")
+    public String showJobProfile(HttpSession session, RedirectAttributes redirectAttributes) {
+        if (!"EMPLOYER".equalsIgnoreCase((String) session.getAttribute("role"))) {
+            redirectAttributes.addFlashAttribute("error", "Access denied.");
+            return "redirect:/login";
+        }
+
+        return "employer_profile";
+    }
+
+    @PostMapping("/employer/postjob")
+    public String handleJobPosting(@ModelAttribute JobDTO jobDto,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+        if (!"EMPLOYER".equalsIgnoreCase((String) session.getAttribute("role"))) {
+            redirectAttributes.addFlashAttribute("error", "Access denied.");
+            return "redirect:/login";
+        }
+
+        String token = (String) session.getAttribute("token");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "Bearer " + token);
+
+        HttpEntity<JobDTO> request = new HttpEntity<>(jobDto, headers);
+
+        ResponseEntity<String> response = restTemplate.postForEntity(
+                baseUrl + "/employer/api/jobs", request, String.class);
+
+        if (response.getStatusCode() == HttpStatus.CREATED) {
+            redirectAttributes.addFlashAttribute("message", "Job posted successfully!");
+            return "redirect:/employer/myjobs";
+        } else {
+            redirectAttributes.addFlashAttribute("error",
+                    "Failed to post job. Backend returned: " + response.getStatusCode());
+            return "redirect:/employer/postjob";
+        }
+    }
+
+    // @GetMapping("/jobListing")
+    // public String showJobListing() {
+    //     return "joblisting";
+    // }
+
+    @GetMapping("/companyList")
+    public String showCompanyListing() {
+        return "companylist";
+    }
+
+    @GetMapping("/signUp")
+    public String showSignUpForm() {
+        return "signInSignUp";
+    }
+    @GetMapping("/jobdesc")
+    public String getJobDesc() {
+        return "jobdesc";
+    }
+    @GetMapping("/companydesc")
+    public String getCompanyDesc() {
+        return "companydesc";
+    }
+    @GetMapping("/jobseeker-register")
+    public String showJobSeekerRegisterForm() {
+        return "jobseeker_register";
+    }
+    @GetMapping("/admin-dashboard")
+    public String adminDashboard() {
+        return "admin";
+    }  
 }

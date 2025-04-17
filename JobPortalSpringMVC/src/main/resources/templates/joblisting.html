@@ -363,6 +363,53 @@
                 <div class="row g-3">
                     <!-- CARD 1: Amazon -->
                     <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="col-md-4" th:each="listing : ${jobListings}">
+                            <div class="job-card">
+                                <div class="job-card-header">
+                                    <!-- Date Pill -->
+                                    <div class="job-date"
+                                        th:text="${#dates.format(listing.job.jobPostedDate, 'dd MMM, yyyy')}">4 Feb,
+                                        2023</div>
+
+                                    <!-- Company Info -->
+                                    <div class="company-row">
+                                        <div class="company-name" th:text="${listing.company.companyName}">Google</div>
+                                        <img th:if="${listing.company.logo != null}"
+                                            th:src="'data:image/png;base64,' + ${T(org.apache.tomcat.util.codec.binary.Base64).encodeBase64String(listing.company.logo)}'"
+                                            alt="Company Logo" class="company-logo" />
+                                        <img th:if="${listing.company.logo == null}"
+                                            th:src="@{/images/companyLogoSmall/default.png}" alt="Default Logo"
+                                            class="company-logo" />
+                                    </div>
+
+                                    <!-- Job Title -->
+                                    <div class="job-title" th:text="${listing.job.jobTitle}">Junior UI/UX Designer</div>
+
+                                    <!-- Badges -->
+                                    <div class="job-badges">
+                                        <span class="badge" th:text="${listing.job.jobStatus}">Full time</span>
+                                        <span class="badge" th:text="${listing.job.experience}">Junior level</span>
+                                        <span class="badge" th:text="${listing.job.workMode}">Remote</span>
+                                    </div>
+                                </div>
+
+                                <div class="job-card-body">
+                                    <div class="bottom-row">
+                                        <div>
+                                            <div class="salary"
+                                                th:text="'₹' + ${listing.job.minSalary} + ' - ₹' + ${listing.job.maxSalary}">
+                                                ₹150/hr</div>
+                                            <div class="location" th:text="${listing.job.location}">California, CA</div>
+                                        </div>
+                                        <a class="details-btn text-decoration-none"
+                                            th:href="@{'/jobdesc/' + ${listing.job.jobId}}">Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
                         <div class="job-card">
                             <!-- Header Section (Inset with mint background) -->
                             <div class="job-card-header">
@@ -372,8 +419,8 @@
                                 <!-- Company row (Name and Logo) -->
                                 <div class="company-row">
                                     <div class="company-name">Google</div>
-                                    <img th:src="@{/images/companyLogoSmall/MNC/GOOG.png}"
-                                        alt="Google Logo" class="company-logo" />
+                                    <img th:src="@{/images/companyLogoSmall/MNC/GOOG.png}" alt="Google Logo"
+                                        class="company-logo" />
                                 </div>
 
                                 <!-- Job Title -->
@@ -412,8 +459,8 @@
                                 <!-- Company row (Name and Logo) -->
                                 <div class="company-row">
                                     <div class="company-name">Google</div>
-                                    <img th:src="@{/images/companyLogoSmall/MNC/GOOG.png}"
-                                        alt="Google Logo" class="company-logo" />
+                                    <img th:src="@{/images/companyLogoSmall/MNC/GOOG.png}" alt="Google Logo"
+                                        class="company-logo" />
                                 </div>
 
                                 <!-- Job Title -->
@@ -452,8 +499,8 @@
                                 <!-- Company row (Name and Logo) -->
                                 <div class="company-row">
                                     <div class="company-name">Google</div>
-                                    <img th:src="@{/images/companyLogoSmall/MNC/GOOG.png}"
-                                        alt="Google Logo" class="company-logo" />
+                                    <img th:src="@{/images/companyLogoSmall/MNC/GOOG.png}" alt="Google Logo"
+                                        class="company-logo" />
                                 </div>
 
                                 <!-- Job Title -->
@@ -492,8 +539,8 @@
                                 <!-- Company row (Name and Logo) -->
                                 <div class="company-row">
                                     <div class="company-name">Google</div>
-                                    <img th:src="@{/images/companyLogoSmall/MNC/GOOG.png}"
-                                        alt="Google Logo" class="company-logo" />
+                                    <img th:src="@{/images/companyLogoSmall/MNC/GOOG.png}" alt="Google Logo"
+                                        class="company-logo" />
                                 </div>
 
                                 <!-- Job Title -->
@@ -532,48 +579,8 @@
                                 <!-- Company row (Name and Logo) -->
                                 <div class="company-row">
                                     <div class="company-name">Google</div>
-                                    <img th:src="@{/images/companyLogoSmall/MNC/GOOG.png}"
-                                        alt="Google Logo" class="company-logo" />
-                                </div>
-
-                                <!-- Job Title -->
-                                <div class="job-title">Junior UI/UX Designer</div>
-
-                                <!-- Badges -->
-                                <div class="job-badges">
-                                    <span class="badge">Full time</span>
-                                    <span class="badge">Junior level</span>
-                                    <span class="badge">Distant</span>
-                                    <span class="badge">Project work</span>
-                                    <span class="badge">Flexible Schedule</span>
-                                </div>
-                            </div>
-
-                            <!-- Card Body Section -->
-                            <div class="job-card-body">
-                                <div class="bottom-row">
-                                    <div>
-                                        <div class="salary">$150/hr</div>
-                                        <div class="location">California, CA</div>
-                                    </div>
-                                    <a class="details-btn text-decoration-none" th:href="@{/jobdesc}">Details</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                        <div class="job-card">
-                            <!-- Header Section (Inset with mint background) -->
-                            <div class="job-card-header">
-                                <!-- Date pill -->
-                                <div class="job-date">4 Feb, 2023</div>
-
-                                <!-- Company row (Name and Logo) -->
-                                <div class="company-row">
-                                    <div class="company-name">Google</div>
-                                    <img th:src="@{/images/companyLogoSmall/MNC/GOOG.png}"
-                                        alt="Google Logo" class="company-logo" />
+                                    <img th:src="@{/images/companyLogoSmall/MNC/GOOG.png}" alt="Google Logo"
+                                        class="company-logo" />
                                 </div>
 
                                 <!-- Job Title -->

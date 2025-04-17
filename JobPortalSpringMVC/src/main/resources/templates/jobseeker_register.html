@@ -4,6 +4,7 @@
 <head>
     <title>Job Seeker Registration</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
@@ -125,29 +126,26 @@
 
     <div class="container">
         <h2 class="text-center py-3">Job Seeker Registration</h2>
-        <form th:action="@{jobseeker/submitForm}" method="post">
+        <form th:action="@{/jobseeker/register}" method="post" th:object="${JobSeekerDTO}" enctype="multipart/form-data">
+            <!-- Step 1: Personal Details -->
             <div class="form-section active" id="section1">
                 <h4>Personal Details</h4>
                 <div class="row">
                     <div class="col-md-6">
                         <label>First Name</label>
-                        <input type="text" class="form-control" name="first_name" required>
+                        <input type="text" class="form-control" th:field="*{firstName}" required>
                     </div>
                     <div class="col-md-6">
                         <label>Last Name</label>
-                        <input type="text" class="form-control" name="last_name" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label>Email</label>
-                        <input type="email" class="form-control" name="email" required>
+                        <input type="text" class="form-control" th:field="*{lastName}" required>
                     </div>
                     <div class="col-md-6">
                         <label>Phone Number</label>
-                        <input type="text" class="form-control" name="phone_number" required>
+                        <input type="text" class="form-control" th:field="*{phoneNumber}" required>
                     </div>
                     <div class="col-md-6">
                         <label>Date of Birth</label>
-                        <input type="date" class="form-control" name="dob" required>
+                        <input type="date" class="form-control" th:field="*{dob}" required>
                     </div>
                 </div>
                 <div class="button-row">
@@ -155,94 +153,145 @@
                 </div>
             </div>
 
+            <!-- Step 2: Education -->
             <div class="form-section" id="section2">
                 <h4>Educational Details</h4>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label>Degree</label>
-                        <input type="text" class="form-control" name="degree" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label>Specialization</label>
-                        <input type="text" class="form-control" name="specialization" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label>From Date</label>
-                        <input type="date" class="form-control" name="from_date" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label>To Date</label>
-                        <input type="date" class="form-control" name="to_date" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label>University</label>
-                        <input type="text" class="form-control" name="university" list="university-list" required>
-                        <datalist id="university-list" style="background-color: #f8fafc; border: 1px solid #e0e7ff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                        <option value="Indian Institute of Technology Bombay">
-                        <option value="Indian Institute of Technology Delhi">
-                        <option value="Indian Institute of Science Bangalore">
-                        <option value="University of Delhi">
-                        <option value="Jawaharlal Nehru University"></option>
-                        <option value="Banaras Hindu University"></option>
-                        <option value="Anna University"></option>
-                        <option value="University of Madras"></option>
-                        <option value="Osmania University"></option>
-                        <option value="University of Hyderabad"></option>
-                        <option value="Visvesvaraya Technological University"></option>
-                        <option value="Manipal Academy of Higher Education"></option>
-                        <option value="Amrita Vishwa Vidyapeetham"></option>
-                        <option value="Bharathiyar University"></option>
-                        <option value="Sri Venkateswara University"></option>
-                        <option value="Others">
-                            </datalist>
-                    </div>
-                    <div class="col-md-6">
-                        <label>Institution</label>
-                        <input type="text" class="form-control" name="institution" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label>Roll Number</label>
-                        <input type="text" class="form-control" name="roll_number" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label>Current Semester</label>
-                        <input type="number" class="form-control" name="current_semester" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label>Education Type</label>
-                        <select class="form-control" name="education_type" required>
-                            <option value="">Select</option>
-                            <option value="full_time">Full Time</option>
-                            <option value="part_time">Part Time</option>
-                            <option value="distance">Distance Learning</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label>Percentage</label>
-                        <input type="number" step="0.01" class="form-control" name="percentage" required>
-                    </div>
-                    <div class="col-12">
-                        <label>Marksheet</label>
-                        <input type="file" class="form-control" name="marksheet" required>
+                <div id="education-container">
+                    <div class="row education-entry" th:each="edu, stat : *{educationList}">
+                        <div class="col-md-6">
+                            <label>Degree</label>
+                            <input type="text" class="form-control"
+                                th:field="*{educationList[__${stat.index}__].degree}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Specialization</label>
+                            <input type="text" class="form-control"
+                                th:field="*{educationList[__${stat.index}__].specialization}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label>From Date</label>
+                            <input type="date" class="form-control"
+                                th:field="*{educationList[__${stat.index}__].fromDate}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label>To Date</label>
+                            <input type="date" class="form-control"
+                                th:field="*{educationList[__${stat.index}__].toDate}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label>University</label>
+                            <input type="text" class="form-control"
+                                th:field="*{educationList[__${stat.index}__].university}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Education Type</label>
+                            <input type="text" class="form-control"
+                                th:field="*{educationList[__${stat.index}__].educationType}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Institution</label>
+                            <input type="text" class="form-control"
+                                th:field="*{educationList[__${stat.index}__].institution}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Roll Number</label>
+                            <input type="text" class="form-control"
+                                th:field="*{educationList[__${stat.index}__].rollNumber}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Percentage</label>
+                            <input type="number" class="form-control"
+                                th:field="*{educationList[__${stat.index}__].percentage}" required>
+                        </div>
                     </div>
                 </div>
+
                 <div class="button-row">
+                    <button type="button" class="btn btn-info" onclick="addEducation()">Add More Education</button>
                     <button type="button" class="btn btn-secondary prev-btn" data-prev="#section1">Back</button>
+                    <button type="button" class="btn btn-primary next-btn" data-next="#section3">Next</button>
+                </div>
+            </div>
+
+
+
+            <!-- Step 3: Experience -->
+            <div class="form-section" id="section3">
+                <h4>Work Experience</h4>
+                <div id="experience-container">
+                    <div class="row experience-entry" th:each="exp, stat : *{workExperienceList}">
+                        <div class="col-md-6">
+                            <label>Company Name</label>
+                            <input type="text" class="form-control"
+                                th:field="*{workExperienceList[__${stat.index}__].companyName}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Company Sector</label>
+                            <input type="text" class="form-control"
+                                th:field="*{workExperienceList[__${stat.index}__].companySector}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Job Title</label>
+                            <input type="text" class="form-control"
+                                th:field="*{workExperienceList[__${stat.index}__].jobTitle}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Job Location</label>
+                            <input type="text" class="form-control"
+                                th:field="*{workExperienceList[__${stat.index}__].jobLocation}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Position Type</label>
+                            <input type="text" class="form-control"
+                                th:field="*{workExperienceList[__${stat.index}__].positionType}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Start Date</label>
+                            <input type="date" class="form-control"
+                                th:field="*{workExperienceList[__${stat.index}__].startDate}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label>End Date</label>
+                            <input type="date" class="form-control"
+                                th:field="*{workExperienceList[__${stat.index}__].endDate}">
+                        </div>
+                        <div class="col-md-6">
+                            <label>Salary</label>
+                            <input type="number" class="form-control"
+                                th:field="*{workExperienceList[__${stat.index}__].salary}">
+                        </div>
+                        <div class="col-md-12">
+                            <label>Job Description</label>
+                            <textarea class="form-control"
+                                th:field="*{workExperienceList[__${stat.index}__].jobDescription}" rows="3"
+                                required></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-row mt-3">
+                    <button type="button" class="btn btn-info" onclick="addExperience()">Add More Experience</button>
+                    <button type="button" class="btn btn-secondary prev-btn" data-prev="#section2">Back</button>
                     <button type="button" class="btn btn-primary next-btn" data-next="#section5">Next</button>
                 </div>
             </div>
 
+
+
+            <!-- Step 4: Skills -->
             <div class="form-section" id="section5">
                 <h4>Skills</h4>
                 <div id="skills-container">
-                    <div class="row skill-entry">
+                    <div class="row skill-entry" th:each="skill, stat : *{skillList}">
                         <div class="col-md-6">
                             <label>Skill Set</label>
-                            <input type="text" class="form-control" name="skill_set[]" required>
+                            <input type="text" class="form-control" th:field="*{skillList[__${stat.index}__].skillSet}"
+                                required>
                         </div>
                         <div class="col-md-6">
                             <label>Proficiency</label>
-                            <select class="form-control" name="proficiency[]" required>
+                            <select class="form-control" th:field="*{skillList[__${stat.index}__].proficiency}"
+                                required>
                                 <option value="beginner">Beginner</option>
                                 <option value="intermediate">Intermediate</option>
                                 <option value="expert">Expert</option>
@@ -250,25 +299,26 @@
                         </div>
                         <div class="col-md-6">
                             <label>Certificate Name</label>
-                            <input type="text" class="form-control" name="certificate_name[]">
-                        </div>
-                        <div class="col-md-6">
-                            <label>Certificate File</label>
-                            <input type="file" class="form-control" name="certificate_file[]">
+                            <input type="text" class="form-control"
+                                th:field="*{skillList[__${stat.index}__].certificateName}">
                         </div>
                     </div>
                 </div>
                 <div class="button-row">
                     <button type="button" class="btn btn-info" onclick="addSkill()">Add More Skills</button>
-                    <button type="button" class="btn btn-secondary prev-btn" data-prev="#section2">Back</button>
+                    <button type="button" class="btn btn-secondary prev-btn" data-prev="#section3">Back</button>
                     <button type="submit" class="btn btn-success">Submit</button>
                 </div>
             </div>
+
+
         </form>
     </div>
 
-   
 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function () {
             $(".next-btn").click(function () {
@@ -289,6 +339,7 @@
             const newSkill = document.createElement("div");
             newSkill.classList.add("row", "skill-entry");
             newSkill.innerHTML = `
+                <h4>New Skill</h4>
                 <div class="col-md-6">
                     <label>Skill Set</label>
                     <input type="text" class="form-control" name="skill_set[]" required>
@@ -317,6 +368,211 @@
         function removeSkill(button) {
             button.closest('.skill-entry').remove();
         }
+
+        $(document).ready(function () {
+            $('#university').select2({
+                placeholder: "Select a university",
+                allowClear: true,
+                width: '100%'  // Makes it match the form-control width
+            });
+        });
+
+        $(document).ready(function () {
+            $('#education_type').select2({
+                placeholder: "Select a Education Type",
+                allowClear: true,
+                width: '100%'  // Makes it match the form-control width
+            });
+        });
+
+        function addEducation() {
+            const container = document.getElementById("education-container");
+            const newEducation = document.createElement("div");
+            newEducation.classList.add("education-entry", "row");
+            newEducation.innerHTML = `
+                   <h4>Educational Details</h4>
+
+                    <div class="col-md-6">
+                        <label>Degree</label>
+                        <input type="text" class="form-control" name="degree" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Specialization</label>
+                        <input type="text" class="form-control" name="specialization" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label>From Date</label>
+                        <input type="date" class="form-control" name="from_date" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label>To Date</label>
+                        <input type="date" class="form-control" name="to_date" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label>University</label>
+                        <select class="form-control" id="university" name="university" required>
+                            <option value="">Select</option>
+                            <option value="Indian Institute of Technology Bombay">Indian Institute of Technology Bombay
+                            </option>
+                            <option value="Indian Institute of Technology Delhi">Indian Institute of Technology Delhi
+                            </option>
+                            <option value="Indian Institute of Science Bangalore">Indian Institute of Science Bangalore
+                            </option>
+                            <option value="University of Delhi">University of Delhi</option>
+                            <option value="Jawaharlal Nehru University">Jawaharlal Nehru University</option>
+                            <option value="Banaras Hindu University">Banaras Hindu University</option>
+                            <option value="Anna University">Anna University</option>
+                            <option value="University of Madras">University of Madras</option>
+                            <option value="Osmania University">Osmania University</option>
+                            <option value="University of Hyderabad">University of Hyderabad</option>
+                            <option value="Visvesvaraya Technological University">Visvesvaraya Technological University
+                            </option>
+                            <option value="Manipal Academy of Higher Education">Manipal Academy of Higher Education
+                            </option>
+                            <option value="Amrita Vishwa Vidyapeetham">Amrita Vishwa Vidyapeetham</option>
+                            <option value="Bharathiyar University">Bharathiyar University</option>
+                            <option value="Sri Venkateswara University">Sri Venkateswara University</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Education Type</label>
+                        <select class="form-control" name="education_type" id="education_type" required>
+                            <option value="">Select</option>
+                            <option value="full_time">Full Time</option>
+                            <option value="part_time">Part Time</option>
+                            <option value="distance">Distance Learning</option>
+                            <option value="online">Online</option>
+                            <option value="correspondence">Correspondence</option>
+                            <option value="evening">Evening Classes</option>
+                            <option value="executive">Executive Program</option>
+                        </select>
+
+                    </div>
+                    <div class="col-md-6">
+                        <label>Institution</label>
+                        <input type="text" class="form-control" name="institution" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Roll Number</label>
+                        <input type="text" class="form-control" name="roll_number" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Percentage</label>
+                        <input type="number" step="0.01" class="form-control" name="percentage" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Marksheet</label>
+                        <input type="file" class="form-control" name="marksheet" required>
+                    </div>
+                    <div class="col-md-12 mt-2">
+            <button type="button" class="btn btn-danger" onclick="removeEducation(this)">Remove</button>
+        </div>
+                
+            `;
+            container.appendChild(newEducation);
+            $(newEducation).find('select').each(function () {
+                $(this).select2({
+                    width: '100%'
+                });
+            });
+
+        }
+
+        function removeEducation(button) {
+            const entry = button.closest('.education-entry');
+            if (entry) {
+                entry.remove();
+            } else {
+                console.error("Could not find .education-entry container.");
+            }
+        }
+
+        function addExperience() {
+            const container = document.getElementById("experience-container");
+            const newEntry = document.createElement("div");
+            newEntry.classList.add("row", "experience-entry");
+            newEntry.innerHTML = `
+            <h4>New Work Experience</h4> 
+        <div class="col-md-6">
+            <label>Company Name</label>
+            <input type="text" class="form-control" name="company_name" required>
+        </div>
+        <div class="col-md-6">
+            <label>Company Sector</label>
+            <input type="text" class="form-control" name="company_sector" required>
+        </div>
+        <div class="col-md-6">
+            <label>Job Title</label>
+            <input type="text" class="form-control" name="job_title" required>
+        </div>
+        <div class="col-md-6">
+            <label>Job Location</label>
+            <input type="text" class="form-control" name="job_location" required>
+        </div>
+        <div class="col-md-6">
+            <label>Position Type</label>
+            <select class="form-control" name="position_type" required>
+                <option value="">Select</option>
+                <option value="full_time">Full Time</option>
+                <option value="part_time">Part Time</option>
+                <option value="internship">Internship</option>
+                <option value="contract">Contract</option>
+                <option value="freelance">Freelance</option>
+                <option value="temporary">Temporary</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label>Start Date</label>
+            <input type="date" class="form-control" name="start_date" required>
+        </div>
+        <div class="col-md-6">
+            <label>End Date</label>
+            <input type="date" class="form-control" name="end_date">
+        </div>
+        <div class="col-md-6">
+            <label>Salary</label>
+            <input type="number" step="0.01" class="form-control" name="salary">
+        </div>
+        <div class="col-md-12">
+            <label>Job Description</label>
+            <textarea class="form-control" name="job_description" rows="3" required></textarea>
+        </div>
+        <div class="col-md-12 mt-2">
+            <button type="button" class="btn btn-danger" onclick="removeExperience(this)">Remove</button>
+        </div>
+    `;
+            container.appendChild(newEntry);
+            $(newEntry).find('select').each(function () {
+                $(this).select2({
+                    width: '100%'
+                });
+            });
+        }
+
+        function removeExperience(button) {
+            const entry = button.closest('.experience-entry');
+            if (entry) {
+                entry.remove();
+            } else {
+                console.error("Could not find .experience-entry container.");
+            }
+        }
+
+        $(document).ready(function () {
+            $('#position_type').select2({
+                placeholder: "Select a position type",
+                width: '100%' // Optional: ensures it fits Bootstrap container
+            });
+        });
+
+        $(document).ready(function () {
+            $('#proficiency_select').select2({
+                placeholder: "Select proficiency level",
+                width: '100%'
+            });
+        });
+
     </script>
 </body>
 
