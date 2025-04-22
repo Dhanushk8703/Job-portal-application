@@ -1,83 +1,247 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
-    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css}" rel="stylesheet">
-    <style>
-        body {
-            background: linear-gradient(to bottom, #b3e0ff, white);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #376FFF;
+      --secondary-color: #e74c3c;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+    body {
+      display: flex;
+      background-color: #ecf1fb;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .sidebar {
+      width: 90px;
+      padding: 20px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+    }
+    .sidebar-section {
+      background-color: #fff;
+      border-radius: 40px;
+      padding: 15px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      gap: 20px;
+    }
+    .logo img {
+      width: 36px;
+      filter: brightness(0);
+    }
+    .nav-icon {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-radius: 50%;
+    }
+    .nav-icon img {
+      width: 22px;
+      filter: brightness(0);
+      transition: all 0.3s ease;
+    }
+    .nav-icon:hover {
+      background-color: var(--primary-color);
+      transform: scale(1.15);
+      box-shadow: 0 8px 20px rgba(55, 111, 255, 0.3);
+    }
+    .nav-icon:hover img {
+      filter: invert(1);
+    }
+    .nav-icon.active {
+      background-color: var(--primary-color);
+    }
+    .nav-icon.active img {
+      filter: invert(1);
+    }
+    .main {
+      flex: 1;
+      padding: 40px;
+      overflow-y: auto;
+    }
 
-        .login-container {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 400px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.header-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+.user-profile img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
 
-        .form-control {
-            padding: 12px;
-            border-radius: 10px;
-        }
-
-        .btn-login {
-            background: black;
-            color: white;
-            padding: 12px;
-            border-radius: 10px;
-            width: 100%;
-            font-weight: bold;
-        }
-
-        .btn-login:hover {
-            background: #333;
-        }
-
-        .social-buttons button {
-            background: #f1f1f1;
-            border: none;
-            padding: 10px;
-            border-radius: 50%;
-            margin: 0 5px;
-        }
-
-        .social-buttons img {
-            width: 24px;
-        }
-    </style>
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+    }
+    .card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #333;
+    }
+    .card .value {
+      font-size: 24px;
+      font-weight: 600;
+      color: #111;
+    }
+    .status-up {
+      background: #d5f5d5;
+      color: green;
+      font-size: 12px;
+      border-radius: 12px;
+      padding: 4px 10px;
+      display: inline-block;
+      margin-left: 8px;
+    }
+    .chart-container {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+    }
+    canvas {
+      max-width: 100%;
+    }
+  </style>
 </head>
-
 <body>
-    <div class="login-container">
-
-        <h2 class="mb-2">Sign in with email</h2>
-
-        <input type="email" class="form-control mb-3" placeholder="Email">
-        <input type="password" class="form-control mb-2" placeholder="Password">
-        <div class="text-end text-primary small mb-3">Forgot password?</div>
-        <button class="btn btn-login">Get Started</button>
-        <p class="text-muted my-3">Or sign in with</p>
-        <div class="social-buttons d-flex justify-content-center">
-            <button>
-                <img th:src="@{https://www.svgrepo.com/show/355037/google.svg}" />
-            </button>
-        </div>
-
+  <div class="sidebar">
+    <div class="logo">
+     <h1>H</h1>
     </div>
-</body>
+    <div class="sidebar-section">
+      <div class="nav-icon active"><img src="https://img.icons8.com/ios-filled/50/000000/combo-chart--v1.png" alt="Analytics"></div>
+      <div class="nav-icon"><img src="https://img.icons8.com/ios-filled/50/000000/conference-call.png" alt="User Management"></div>
+      <div class="nav-icon"><img src="https://img.icons8.com/ios-filled/50/000000/faq.png" alt="Query"></div>
+    </div>
+    <div class="sidebar-section">
+      <div class="nav-icon"><img src="https://img.icons8.com/ios-filled/50/000000/settings.png" alt="Settings"></div>
+      <div class="nav-icon"><img src="https://img.icons8.com/ios-filled/50/000000/logout-rounded-left.png" alt="Logout"></div>
+    </div>
+  </div>
+  <div class="main">
+    <!-- Inside <div class="main">, add this at the beginning -->
+<div class="header">
+    <div class="header-title">Admin Dashboard</div>
+    <div class="user-profile">
+      <img src="https://img.icons8.com/ios-filled/50/000000/user-male-circle.png" alt="Admin Profile">
+    </div>
+  </div>
+  
+    <div class="grid">
+      <div class="card">
+        <h3>Total Jobseekers</h3>
+        <div class="value">8,234</div>
+      </div>
+      <div class="card">
+        <h3>Total Employers</h3>
+        <div class="value">1,452</div>
+      </div>
+      <div class="card">
+        <h3>Jobs Posted</h3>
+        <div class="value">3,789</div>
+      </div>
+      <div class="card">
+        <h3>Applications Received</h3>
+        <div class="value">15,204</div>
+      </div>
+      <div class="card">
+        <h3>Avg. Application per Job</h3>
+        <div class="value">4.01</div>
+      </div>
+      <div class="card">
+        <h3>Active Jobseekers</h3>
+        <div class="value">5,987 <span class="status-up">+5%</span></div>
+      </div>
+      <div class="chart-container" style="grid-column: 1 / -1;">
+        <h3>Monthly Job Posts</h3>
+        <canvas id="jobPostChart"></canvas>
+      </div>
+      <div class="chart-container" style="grid-column: 1 / -1;">
+        <h3>Monthly Applications</h3>
+        <canvas id="applicationChart"></canvas>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+  <script>
+    const jobPostCtx = document.getElementById('jobPostChart').getContext('2d');
+    const jobPostChart = new Chart(jobPostCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [{
+          label: 'Jobs Posted',
+          data: [320, 410, 390, 512, 450, 600],
+          backgroundColor: 'rgba(55, 111, 255, 0.6)',
+          borderRadius: 8
+        }]
+      },
+      options: {
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+
+    const appCtx = document.getElementById('applicationChart').getContext('2d');
+    const appChart = new Chart(appCtx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [{
+          label: 'Applications',
+          data: [2100, 3200, 2980, 4100, 3900, 4800],
+          borderColor: '#e74c3c',
+          backgroundColor: 'rgba(231, 76, 60, 0.1)',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  </script>
+</body>
 </html>

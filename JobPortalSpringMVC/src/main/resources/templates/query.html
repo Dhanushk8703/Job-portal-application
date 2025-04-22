@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #376FFF;
+      --secondary-color: #e74c3c;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+    body {
+      display: flex;
+      background-color: #ecf1fb;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .sidebar {
+      width: 90px;
+      padding: 20px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+    }
+    .sidebar-section {
+      background-color: #fff;
+      border-radius: 40px;
+      padding: 15px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      gap: 20px;
+    }
+    .logo img {
+      width: 36px;
+      filter: brightness(0);
+    }
+    .nav-icon {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-radius: 50%;
+    }
+    .nav-icon img {
+      width: 22px;
+      filter: brightness(0);
+      transition: all 0.3s ease;
+    }
+    .nav-icon:hover {
+      background-color: var(--primary-color);
+      transform: scale(1.15);
+      box-shadow: 0 8px 20px rgba(55, 111, 255, 0.3);
+    }
+    .nav-icon:hover img {
+      filter: invert(1);
+    }
+    .nav-icon.active {
+      background-color: var(--primary-color);
+    }
+    .nav-icon.active img {
+      filter: invert(1);
+    }
+    .main {
+      flex: 1;
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.header-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+.user-profile img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.query-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.query-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.query-card:hover {
+  transform: translateY(-3px);
+}
+
+.query-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.query-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.query-status {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+.query-info p {
+  margin: 6px 0;
+  color: #555;
+  font-size: 15px;
+}
+
+.query-actions {
+  margin-top: 15px;
+}
+
+.query-actions button {
+  padding: 6px 14px;
+  margin-right: 8px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.query-actions button:nth-child(1) {
+  background: var(--primary-color);
+  color: white;
+}
+
+.query-actions button:nth-child(2) {
+  background: #28a745;
+  color: white;
+}
+
+.query-actions button:nth-child(3) {
+  background: var(--secondary-color);
+  color: white;
+}
+
+.query-actions button:hover {
+  opacity: 0.9;
+}
+
+
+
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo">
+     <h1>H</h1>
+    </div>
+    <div class="sidebar-section">
+      <a class="nav-icon" th:href="@{/admin.html}"><img th:src="@{https://img.icons8.com/ios-filled/50/000000/combo-chart--v1.png}" alt="Analytics"></a>
+      <a class="nav-icon" th:href="@{/employermanage.html}"><img th:src="@{https://img.icons8.com/ios-filled/50/000000/conference-call.png}" alt="User Management"></a>
+      <div class="nav-icon active"><img th:src="@{https://img.icons8.com/ios-filled/50/000000/faq.png}" alt="Query"></div>
+    </div>
+    <div class="sidebar-section">
+      <a class="nav-icon" th:href="@{/adminprofile.html}"><img th:src="@{https://img.icons8.com/ios-filled/50/000000/settings.png}" alt="Settings"></a>
+      <div class="nav-icon"><img th:src="@{https://img.icons8.com/ios-filled/50/000000/logout-rounded-left.png}" alt="Logout"></div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="header">
+      <div class="header-title">Query Management</div>
+    </div>
+    
+    <!-- Query List -->
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+    
+      <!-- Query Card -->
+      <div style="background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h4 style="margin-bottom: 10px;">John Doe</h4>
+          <span style="background-color: #376FFF; color: white; padding: 4px 12px; border-radius: 20px; font-size: 14px;">New</span>
+        </div>
+        <p><strong>Email:</strong> john@example.com</p>
+        <p><strong>Subject:</strong> Unable to login</p>
+        <p><strong>Message:</strong> I'm not able to access my account, it says invalid user.</p>
+    
+        <div style="margin-top: 15px;">
+          <button style="padding: 6px 14px; margin-right: 8px; background: #376FFF; color: white; border: none; border-radius: 6px; cursor: pointer;">View</button>
+          <button style="padding: 6px 14px; margin-right: 8px; background: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer;">Resolve</button>
+          <button style="padding: 6px 14px; background: #e74c3c; color: white; border: none; border-radius: 6px; cursor: pointer;">Delete</button>
+        </div>
+      </div>
+      
+      <!-- You can duplicate this card for more queries -->
+    </div>
+  </div>
+</body>
+</html>

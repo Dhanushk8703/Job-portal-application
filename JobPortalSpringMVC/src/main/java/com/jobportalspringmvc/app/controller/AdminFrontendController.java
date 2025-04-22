@@ -10,6 +10,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 @RequestMapping("/admin")
@@ -73,4 +76,7 @@ public class AdminFrontendController {
 
         return "redirect:/admin/dashboard";
     }
+
+ 
+    
 }
