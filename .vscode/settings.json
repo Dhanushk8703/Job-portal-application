@@ -1,4 +1,17 @@
 {
     "java.compile.nullAnalysis.mode": "automatic",
+<<<<<<< HEAD
     "liveServer.settings.port": 5501
+=======
+    "cSpell.words": [
+        "companydesc",
+        "companylist",
+        "jobdesc",
+        "joblisting",
+        "jobportalspringmvc",
+        "jobseeker",
+        "myjobs",
+        "postjob"
+    ]
+>>>>>>> 8b2c7fc1146e99755b26b5684c90cbf1a9249837
 }

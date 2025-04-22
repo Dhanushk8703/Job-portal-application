@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/auth")
 public class CompanyRestController {
 
     private final CompanyRepository companyRepository;
@@ -24,16 +23,21 @@ public class CompanyRestController {
         this.companyService = companyService;
     }
 
-    // ✅ Save Company (Default Status: PENDING)
-    @PostMapping("/api/company")
+    @PostMapping("/auth/api/company")
     public ResponseEntity<String> saveCompany(@RequestBody Company company) {
         company.setStatus(CompanyStatus.PENDING); // Ensure it's pending initially
         companyRepository.save(company);
         return ResponseEntity.ok("Company saved successfully");
     }
 
-    // ✅ Get All Companies
-    @GetMapping
+    @GetMapping("/api/company/{employerEmail}")
+    public ResponseEntity<Company> getCompanyByEmail(@PathVariable String employerEmail) {
+        return companyService.findByEmail(employerEmail)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/auth/api/company")
     public ResponseEntity<List<Company>> getAllCompanies() {
         return ResponseEntity.ok(companyRepository.findAll());
     }

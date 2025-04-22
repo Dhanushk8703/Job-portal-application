@@ -7,12 +7,14 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jobportalspringmvc.app.dto.CompanyDTO;
 
@@ -77,6 +79,35 @@ public class CompanyController {
         } catch (Exception e) {
             return "login";
         }
+    }
+
+    @GetMapping("/company")
+    public String getCompanyData(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+        String email = (String) session.getAttribute("email");
+
+        if (email == null) {
+            redirectAttributes.addFlashAttribute("error", "User not logged in.");
+            return "redirect:/login";
+        }
+
+        String url = apiBaseUrl + "/api/company/" + email;
+
+        try {
+            ResponseEntity<CompanyDTO> response = restTemplate.getForEntity(url, CompanyDTO.class);
+
+            if (response.getStatusCode() == HttpStatus.OK) {
+                CompanyDTO company = response.getBody();
+                model.addAttribute("company", company);
+                return "employer/company-details"; // Thymeleaf view
+            } else {
+                redirectAttributes.addFlashAttribute("error", "Company not found.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Failed to retrieve company data.");
+        }
+
+        return "redirect:/employer/home";
     }
 
 }

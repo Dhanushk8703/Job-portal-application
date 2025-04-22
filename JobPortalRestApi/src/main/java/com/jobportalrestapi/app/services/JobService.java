@@ -21,7 +21,6 @@ public class JobService {
         Job job = new Job();
         job.setEmployerEmail(dto.employerEmail);
         job.setJobTitle(dto.jobTitle);
-        job.setCompanyId(dto.getCompanyId());
         job.setJobDescription(dto.jobDescription);
         job.setWorkMode(dto.workMode);
         job.setLocation(dto.location);
@@ -91,4 +90,3 @@ public class JobService {
         return draftJobs.stream().map(this::convertToDto).toList();
     }
 }
-

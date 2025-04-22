@@ -82,7 +82,7 @@ public class UserController {
                     return "redirect:/company-form?email=" + email;
                 }
                 else if(backendRole == Role.JOBSEEKER) {
-                    return "redirect:/jobseeker-register?email=" + email;
+                    return "redirect:/jobseeker/register?email=" + email;
                 }
                 else {
                     redirectAttributes.addFlashAttribute("error", "Invalid role.");
@@ -152,28 +152,6 @@ public class UserController {
         }
 
         return "redirect:/login";
-    }
-
-    @GetMapping("/employer/home")
-    public String employerHome(HttpSession session, RedirectAttributes redirectAttributes, Model model) {
-        if (!"EMPLOYER".equalsIgnoreCase((String) session.getAttribute("role"))) {
-            redirectAttributes.addFlashAttribute("error", "Access denied.");
-            return "redirect:/login";
-        }
-        String email = (String) session.getAttribute("email");
-        model.addAttribute("email", email);
-        String employerEmail = (String) session.getAttribute("email");
-
-        return "employer-home";
-    }
-
-    @GetMapping("/jobseeker/home")
-    public String jobSeekerHome(HttpSession session, RedirectAttributes redirectAttributes) {
-        if (!"JOBSEEKER".equalsIgnoreCase((String) session.getAttribute("role"))) {
-            redirectAttributes.addFlashAttribute("error", "Access denied.");
-            return "redirect:/login";
-        }
-        return "jobseeker-home";
     }
 
     @GetMapping("/logout")
@@ -257,10 +235,10 @@ public class UserController {
         }
     }
 
-    @GetMapping("/jobListing")
-    public String showJobListing() {
-        return "joblisting";
-    }
+    // @GetMapping("/jobListing")
+    // public String showJobListing() {
+    //     return "joblisting";
+    // }
 
     @GetMapping("/companyList")
     public String showCompanyListing() {
@@ -286,8 +264,5 @@ public class UserController {
     @GetMapping("/admin-dashboard")
     public String adminDashboard() {
         return "admin";
-    }
-
-    
-    
+    }  
 }

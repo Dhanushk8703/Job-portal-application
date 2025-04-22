@@ -11,6 +11,8 @@ import com.jobportalrestapi.app.model.Job;
 public interface JobRepository extends JpaRepository<Job, Long> {
 
     List<Job> findByEmployerEmailAndJobStatus(String employerEmail, String string);
+
+    List<Job> findByJobStatus(String jobStatus);
     
 }
 

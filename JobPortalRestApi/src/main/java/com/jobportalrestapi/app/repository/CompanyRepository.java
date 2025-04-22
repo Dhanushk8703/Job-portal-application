@@ -10,4 +10,5 @@ import com.jobportalrestapi.app.model.CompanyStatus;
 public interface CompanyRepository extends JpaRepository<Company, Long> {
 List<Company> findByStatus(CompanyStatus status);
 
+    Company findByEmployerEmail(String employerEmail);
 }
