@@ -155,10 +155,10 @@ public class JobSeekerController {
         return "jobseeker-home";
     }
     
-    @GetMapping("/jobListing")
-    public String showJobListing() {
-        return "joblisting";
-    }
+    // @GetMapping("/jobListing")
+    // public String showJobListing() {
+    //     return "joblisting";
+    // }
     
     @GetMapping("/companyList")
     public String showCompanyListing() {
